@@ -148,7 +148,7 @@ jobs:
     format: json
   - task: add-gcp-creds-to-credhub
     image: pcf-ops-image
-    file: kf-pipelines/ci/tasks/add-value-to-credhub/task.yml
+    file: tas-srt-gcp-pipeline-repo/ci/tasks/add-value-to-credhub/task.yml
     input_mapping:
       repo: tas-srt-gcp-pipeline-repo
     params:
