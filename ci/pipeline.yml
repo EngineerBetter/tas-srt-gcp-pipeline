@@ -101,8 +101,6 @@ resources:
     backend_config:
       bucket: ((gcp_project_id))
       prefix: terraform/paving
-    env:
-      GOOGLE_CREDENTIALS: ((gcp_credentials_json))
 
 - name: pcf-ops-image
   type: registry-image
