@@ -143,18 +143,6 @@ jobs:
   - put: project-account-and-bucket-terraform
     params:
       terraform_source: tas-srt-gcp-pipeline-repo/tf/project-account-and-bucket
-  - load_var: service-creds
-    file: project-account-and-bucket-terraform/metadata
-    format: json
-  - task: add-gcp-creds-to-credhub
-    image: pcf-ops-image
-    file: tas-srt-gcp-pipeline-repo/ci/tasks/add-value-to-credhub/task.yml
-    input_mapping:
-      repo: tas-srt-gcp-pipeline-repo
-    params:
-      NAME: /concourse/((concourse_team))/((concourse_pipeline))/gcp_credentials_json
-      VALUE: ((.:service-creds.gcp_credentials_json))
-      <<: *credhub-params
 
 - name: pave-project
   serial: true
@@ -195,6 +183,8 @@ jobs:
           hosted_zone: ((.:project-creds.zone_name))
           ssl_certificate: ((.:project-creds.ssl_cert))
           ssl_private_key: ((.:project-creds.ssl_key))
+      env:
+        GOOGLE_CREDENTIALS: ((.:project-creds.gcp_credentials_json))
 
 - name: teardown-project
   plan:
@@ -244,3 +234,5 @@ jobs:
       get_params: {action: destroy}
       vars:
         <<: *paving-vars
+      env:
+        GOOGLE_CREDENTIALS: ((.:project-creds.gcp_credentials_json))
