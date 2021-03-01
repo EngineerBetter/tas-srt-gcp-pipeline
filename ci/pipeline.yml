@@ -139,7 +139,7 @@ jobs:
         file: tfstate-out/terraform.tfstate
   - put: project-account-and-bucket-terraform
     params:
-      terraform_source: tas-srt-gcp-pipeline-repo/terraform/deployments/project-account-and-bucket
+      terraform_source: tas-srt-gcp-pipeline-repo/tf/project-account-and-bucket
   - load_var: service-creds
     file: project-account-and-bucket-terraform/metadata
     format: json
