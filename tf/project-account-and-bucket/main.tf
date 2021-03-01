@@ -80,6 +80,11 @@ resource "google_project_service" "storage" {
   service = "storage.googleapis.com"
 }
 
+resource "google_project_service" "iam" {
+  project = var.project_id
+  service = "iam.googleapis.com"
+}
+
 data "google_compute_zones" "available" {
   depends_on = [
     google_project_service.compute,
