@@ -1,0 +1,243 @@
+meta:
+  credhub-params: &credhub-params
+    CREDHUB_CA_CERT: ((credhub.ca_cert))
+    CREDHUB_SECRET: ((credhub.secret))
+    CREDHUB_CLIENT: ((credhub.client))
+    CREDHUB_SERVER: ((credhub.server))
+
+  bootstrap-params: &bootstrap-params
+    BILLING_ACCOUNT_ID: ((billing_account_id))
+    BUCKET_LOCATION: ((bucket_location))
+    FOLDER_NAME: ((folder_name))
+    GCP_CREDENTIALS_JSON: ((inception_gcp_credentials_json))
+    ORGANIZATION_ID: ((organization_id))
+    PROJECT_ID: ((gcp_project_id))
+    PROJECT_NAME: ((project_name))
+
+groups:
+- name: deploy
+  jobs:
+  - set-pipeline
+  - setup-project
+  - pave-project
+- name: teardown
+  jobs:
+  - set-pipeline
+  - teardown-project
+  - unpave-project
+
+resource_types:
+- name: terraform
+  type: registry-image
+  source:
+    repository: ljfranklin/terraform-resource
+    tag: latest
+
+- name: gcs
+  type: registry-image
+  source:
+    repository: frodenas/gcs-resource
+
+resources:
+- name: tas-srt-gcp-pipeline-repo
+  type: git
+  icon: github
+  source:
+    uri: git@github.com:EngineerBetter/tas-srt-gcp-pipeline.git
+    private_key: ((git_private_key))
+    branch: master
+    ignore_paths:
+    - README.md
+
+- name: concourse-gcp-tf-bootstrap
+  type: git
+  icon: github
+  source:
+    uri: git@github.com:EngineerBetter/concourse-gcp-tf-bootstrap.git
+    private_key: ((git_private_key))
+    branch: master
+
+- name: paving
+  type: git
+  icon: github
+  source:
+    uri: git@github.com:pivotal/paving.git
+    private_key: ((git_private_key))
+    branch: master
+
+- name: project-tfstate
+  type: gcs
+  icon: google-cloud
+  source:
+    bucket: ((gcp_project_id))
+    json_key: ((inception_gcp_credentials_json))
+    versioned_file: ci/terraform.tfstate
+
+- name: project-account-and-bucket-terraform
+  type: terraform
+  icon: terraform
+  source:
+    env_name: ((env))-project
+    backend_type: gcs
+    backend_config:
+      bucket: ((gcp_project_id))
+      prefix: terraform/project-account-and-bucket
+    env:
+      GOOGLE_CREDENTIALS: ((inception_gcp_credentials_json))
+    vars:
+      project_id: ((gcp_project_id))
+      env: ((env))
+      zone_address: ((project_name)).engineerbetter.com
+
+- name: paving-terraform
+  type: terraform
+  icon: terraform
+  source:
+    env_name: ((env))-project
+    backend_type: gcs
+    backend_config:
+      bucket: ((gcp_project_id))
+      prefix: terraform/paving
+    env:
+      GOOGLE_CREDENTIALS: ((gcp_credentials_json))
+
+- name: pcf-ops-image
+  type: registry-image
+  icon: docker
+  source:
+    repository: engineerbetter/pcf-ops
+
+jobs:
+- name: set-pipeline
+  serial: true
+  plan:
+  - get: tas-srt-gcp-pipeline-repo
+    trigger: true
+  - set_pipeline: self
+    file: tas-srt-gcp-pipeline-repo/ci/pipeline.yml
+    var_files:
+    - tas-srt-gcp-pipeline-repo/vars/((env)).yml
+
+- name: setup-project
+  serial: true
+  plan:
+  - in_parallel:
+    - get: tas-srt-gcp-pipeline-repo
+      trigger: true
+      passed:
+      - set-pipeline
+    - get: concourse-gcp-tf-bootstrap
+    - get: pcf-ops-image
+  - task: bootstrap
+    file: concourse-gcp-tf-bootstrap/tasks/bootstrap.yml
+    params:
+      <<: *bootstrap-params
+      GCP_FLAKINESS_SLEEP: "60"
+    ensure:
+      put: project-tfstate
+      params:
+        file: tfstate-out/terraform.tfstate
+  - put: project-account-and-bucket-terraform
+    params:
+      terraform_source: tas-srt-gcp-pipeline-repo/terraform/deployments/project-account-and-bucket
+  - load_var: service-creds
+    file: project-account-and-bucket-terraform/metadata
+    format: json
+  - task: add-gcp-creds-to-credhub
+    image: pcf-ops-image
+    file: kf-pipelines/ci/tasks/add-value-to-credhub/task.yml
+    input_mapping:
+      repo: tas-srt-gcp-pipeline-repo
+    params:
+      NAME: /concourse/((concourse_team))/((concourse_pipeline))/gcp_credentials_json
+      VALUE: ((.:service_creds.gcp_credentials_json))
+      <<: *credhub-params
+
+- name: pave-project
+  serial: true
+  plan:
+  - in_parallel:
+    - get: tas-srt-gcp-pipeline-repo
+      trigger: true
+      passed: [setup-project]
+    - get: paving
+    - get: project-account-and-bucket-terraform
+      passed: [setup-project]
+    - get: pcf-ops-image
+  - in_parallel:
+    - load_var: project-creds
+      file: project-account-and-bucket-terraform/metadata
+      format: json
+    - task: nuke-pks
+      image: pcf-ops-image
+      config:
+        platform: linux
+        inputs: [name: paving]
+        outputs: [name: paving]
+        run:
+          path: bash
+          args:
+          - -euc
+          - |
+            rm -f paving/gcp/pks-*
+  - put: paving-terraform
+    params:
+      terraform_source: paving/gcp
+      vars:
+        <<: &paving-vars
+          project: ((gcp_project_id))
+          environment_name: ((env))
+          region: europe-west2
+          availability_zone: ((.:project-creds.available_zones))
+          hosted_zone: ((.:project-creds.zone_name))
+          ssl_certificate: ((.:project-creds.ssl_cert))
+          ssl_private_key: ((.:project-creds.ssl_key))
+
+- name: teardown-project
+  plan:
+  - in_parallel:
+    - get: tas-srt-gcp-pipeline-repo
+      passed:
+      - set-pipeline
+    - get: concourse-gcp-tf-bootstrap
+    - get: project-tfstate
+  - task: teardown
+    file: concourse-gcp-tf-bootstrap/tasks/teardown.yml
+    input_mapping:
+      tfstate: project-tfstate
+    params:
+      <<: *bootstrap-params
+
+- name: unpave-project
+  serial: true
+  plan:
+  - in_parallel:
+    - get: tas-srt-gcp-pipeline-repo
+      passed:
+      - set-pipeline
+    - get: paving
+    - get: project-account-and-bucket-terraform
+    - get: pcf-ops-image
+  - in_parallel:
+    - load_var: project-creds
+      file: project-account-and-bucket-terraform/metadata
+      format: json
+    - task: nuke-pks
+      image: pcf-ops-image
+      config:
+        platform: linux
+        inputs: [name: paving]
+        outputs: [name: paving]
+        run:
+          path: bash
+          args:
+          - -euc
+          - |
+            rm -f paving/gcp/pks-*
+  - put: paving-terraform
+    params:
+      terraform_source: paving/gcp
+      action: destroy
+      get_params: {action: destroy}
+      vars:
+        <<: *paving-vars
