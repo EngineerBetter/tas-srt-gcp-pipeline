@@ -177,12 +177,11 @@ jobs:
           project: ((gcp_project_id))
           environment_name: ((env))
           region: europe-west2
-          availability_zone: ((.:project-creds.available_zones))
+          availability_zones: ((.:project-creds.available_zones))
           hosted_zone: ((.:project-creds.zone_name))
           ssl_certificate: ((.:project-creds.ssl_cert))
           ssl_private_key: ((.:project-creds.ssl_key))
-      env:
-        GOOGLE_CREDENTIALS: ((.:project-creds.gcp_credentials_json))
+          service_account_key: ((.:project-creds.gcp_credentials_json))
 
 - name: teardown-project
   plan:
@@ -232,5 +231,3 @@ jobs:
       get_params: {action: destroy}
       vars:
         <<: *paving-vars
-      env:
-        GOOGLE_CREDENTIALS: ((.:project-creds.gcp_credentials_json))
