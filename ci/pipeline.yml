@@ -182,6 +182,8 @@ jobs:
           ssl_certificate: ((.:project-creds.ssl_cert))
           ssl_private_key: ((.:project-creds.ssl_key))
           service_account_key: ((.:project-creds.gcp_credentials_json))
+      env:
+        GOOGLE_CREDENTIALS: ((.:project-creds.gcp_credentials_json))
 
 - name: teardown-project
   plan:
@@ -231,3 +233,5 @@ jobs:
       get_params: {action: destroy}
       vars:
         <<: *paving-vars
+      env:
+        GOOGLE_CREDENTIALS: ((.:project-creds.gcp_credentials_json))
