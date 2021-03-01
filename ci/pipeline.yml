@@ -83,6 +83,9 @@ resources:
       bucket: ((gcp_project_id))
       prefix: terraform/project-account-and-bucket
     env:
+      AWS_ACCESS_KEY_ID: ((aws_access_key_id))
+      AWS_SECRET_ACCESS_KEY: ((aws_secret_access_key))
+      AWS_DEFAULT_REGION: ((aws_default_region))
       GOOGLE_CREDENTIALS: ((inception_gcp_credentials_json))
     vars:
       project_id: ((gcp_project_id))
