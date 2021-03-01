@@ -184,8 +184,12 @@ jobs:
           service_account_key: ((.:project-creds.gcp_credentials_json))
       env:
         GOOGLE_CREDENTIALS: ((.:project-creds.gcp_credentials_json))
+    get_params:
+      env:
+        GOOGLE_CREDENTIALS: ((.:project-creds.gcp_credentials_json))
 
 - name: teardown-project
+  serial: true
   plan:
   - in_parallel:
     - get: tas-srt-gcp-pipeline-repo
