@@ -1,6 +1,5 @@
 resource "tls_private_key" "lb-key" {
-  algorithm   = "RSA"
-  ecdsa_curve = "P384"
+  algorithm = "RSA"
 }
 
 resource "tls_self_signed_cert" "lb-cert" {
