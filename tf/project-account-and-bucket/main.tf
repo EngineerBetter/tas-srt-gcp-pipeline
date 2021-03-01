@@ -81,4 +81,7 @@ resource "google_project_service" "storage" {
 }
 
 data "google_compute_zones" "available" {
+  depends_on = [
+    google_project_service.compute,
+  ]
 }
