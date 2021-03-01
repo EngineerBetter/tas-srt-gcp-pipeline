@@ -1,5 +1,7 @@
 env: dev
 
+concourse_team: main
+concourse_pipeline: srt-pipeline
 gcp_project_id: srt-test-1
 project_name: srt-test-1
 folder_name: spikes
