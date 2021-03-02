@@ -334,6 +334,7 @@ jobs:
       trigger: true
       passed: [test-platform-automation]
     - get: state
+    - get: pcf-ops-image
   - task: prepare-tasks-with-secrets
     <<: *prepare-tasks-with-secrets
   - task: prepare-image
@@ -348,6 +349,11 @@ jobs:
       CONFIG_FILE: config/download-opsman.yml
     output_mapping:
       downloaded-product: opsman-image
+  - task: write-gcp-creds-to-file
+    image: pcf-ops-image
+    file: tas-srt-gcp-pipeline-repo/ci/tasks/write-gcp-creds-to-file/task.yml
+    params:
+      GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
   - task: create-vm
     image: platform-automation-image
     file: platform-automation-tasks/tasks/create-vm.yml
@@ -358,7 +364,7 @@ jobs:
     params:
       OPSMAN_CONFIG_FILE: config/opsman.yml
       STATE_FILE: state.yml
-      VARS_FILES: vars/vars/((env)).yml
+      VARS_FILES: vars/vars/((env)).yml vars/vars/g_creds.yml
     ensure: &put-state
       do:
       - put: state
