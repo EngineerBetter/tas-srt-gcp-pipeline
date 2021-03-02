@@ -25,3 +25,7 @@ output "ssl_key" {
 output "ssl_cert" {
   value = tls_self_signed_cert.lb-cert.cert_pem
 }
+
+output "gcp_service_account_email" {
+  value = google_service_account.ci_bot.email
+}

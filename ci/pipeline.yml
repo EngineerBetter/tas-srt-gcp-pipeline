@@ -281,7 +281,7 @@ jobs:
   - in_parallel:
     - get: tas-srt-gcp-pipeline-repo
       trigger: true
-      passed: [set-pipeline]
+      passed: [pave-project]
     - get: project-account-and-bucket-terraform
     - get: paving-terraform
     - get: pcf-ops-image
@@ -304,7 +304,7 @@ jobs:
           unpack: true
       - get: tas-srt-gcp-pipeline-repo
         trigger: true
-        passed: [pave-project]
+        passed: [load-tfvars-into-credhub]
     - task: test-interpolate
       image: platform-automation-image
       file: platform-automation-tasks/tasks/test-interpolate.yml
@@ -332,8 +332,7 @@ jobs:
         unpack: true
     - get: tas-srt-gcp-pipeline-repo
       trigger: true
-      # passed: [test-platform-automation]
-      passed: [set-pipeline]
+      passed: [test-platform-automation]
     - get: state
   - task: prepare-tasks-with-secrets
     <<: *prepare-tasks-with-secrets

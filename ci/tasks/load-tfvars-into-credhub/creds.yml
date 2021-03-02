@@ -23,3 +23,7 @@ credentials:
 - name: /concourse/((concourse_team))/((concourse_pipeline))/region
   type: value
   value: ((region))
+
+- name: /concourse/((concourse_team))/((concourse_pipeline))/gcp_service_account_email
+  type: value
+  value: ((gcp_service_account_email))
