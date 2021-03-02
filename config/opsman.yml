@@ -7,4 +7,6 @@ opsman-configuration:
     zone: ((region))-b
     vpc_subnet: ((management_subnet_name))
     public_ip: ((ops_manager_public_ip))
-    ssh_public_key: ((ops_manager_ssh_private_key))
+    ssh_public_key: |
+      ((ops_manager_ssh_private_key))
+    tags: ((ops_manager_tags))
