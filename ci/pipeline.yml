@@ -19,13 +19,19 @@ meta:
     file: platform-automation-tasks/tasks/prepare-tasks-with-secrets.yml
     input_mapping:
       tasks: platform-automation-tasks
-      config: configuration
-      vars: configuration
+      config: tas-srt-gcp-pipeline-repo
+      vars: tas-srt-gcp-pipeline-repo
     params:
-      CONFIG_PATHS: config/foundations/config config/foundations/((foundation))/config
-      VARS_PATHS: vars/foundations/((foundation))/vars
+      CONFIG_PATHS: config/config
+      VARS_PATHS: vars/vars
     output_mapping:
       tasks: platform-automation-tasks
+
+  prepare-image: &prepare-image
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/prepare-image.yml
+    params:
+      CA_CERTS: ((opsman-ssl.ca))
 
 groups:
 - name: deploy
@@ -33,6 +39,8 @@ groups:
   - set-pipeline
   - setup-project
   - pave-project
+  - test-platform-automation
+  - install-*
 - name: fetch-dependencies
   jobs:
   - fetch-*
@@ -108,6 +116,21 @@ resources:
     <<: *gcs-source
     regexp: platform-automation-image-(.*).tgz
 
+# VM state and foundation tas-srt-gcp-pipeline-repo
+- name: state
+  type: gcs
+  source:
+    <<: *gcs-source
+    versioned_file: state.yml
+    initial_content_text: '{}'
+    initial_version: 'empty-start'
+
+- name: installation
+  type: gcs
+  source:
+    <<: *gcs-source
+    regexp: installation-(.*).zip
+
 - name: project-account-and-bucket-terraform
   type: terraform
   icon: terraform
@@ -152,6 +175,17 @@ resources:
     product_slug: platform-automation
     product_version: 5\.(.*)
     sort_by: semver
+
+# Triggers
+- name: one-time-trigger
+  type: time
+  source:
+    interval: 999999h
+
+# - name: daily-trigger
+#   type: time
+#   source:
+#     interval: 24h
 
 jobs:
 - name: set-pipeline
@@ -239,6 +273,133 @@ jobs:
           ssl_certificate: ((.:project-creds.ssl_cert))
           ssl_private_key: ((.:project-creds.ssl_key))
           service_account_key: ((.:project-creds.gcp_credentials_json))
+
+- name: test-platform-automation
+  serial: true
+  plan:
+    - in_parallel:
+      - get: platform-automation-image
+        params:
+          unpack: true
+      - get: platform-automation-tasks
+        params:
+          unpack: true
+      - get: tas-srt-gcp-pipeline-repo
+    - task: test-interpolate
+      image: platform-automation-image
+      file: platform-automation-tasks/tasks/test-interpolate.yml
+      params:
+        CONFIG_FILE: config/download-tas.yml
+        SKIP_MISSING: true
+      input_mapping:
+        config: tas-srt-gcp-pipeline-repo
+    - task: test
+      file: platform-automation-tasks/tasks/test.yml
+      image: platform-automation-image
+
+- name: install-opsman
+  serial: true
+  serial_groups: [ install ]
+  plan:
+  - in_parallel:
+    - get: platform-automation-image
+      params:
+        unpack: true
+    - get: one-time-trigger
+      trigger: true
+    - get: platform-automation-tasks
+      params:
+        unpack: true
+    - get: tas-srt-gcp-pipeline-repo
+    - get: state
+  - task: prepare-tasks-with-secrets
+    <<: *prepare-tasks-with-secrets
+  - task: prepare-image
+    <<: *prepare-image
+  - task: download-opsman-image
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/download-product.yml
+    input_mapping:
+      config: tas-srt-gcp-pipeline-repo
+      vars: tas-srt-gcp-pipeline-repo
+    params:
+      CONFIG_FILE: config/download-opsman.yml
+      VARS_FILES: vars/vars/versions.yml
+      SOURCE: s3
+    output_mapping:
+      downloaded-product: opsman-image
+  - task: create-vm
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/create-vm.yml
+    input_mapping:
+      image: opsman-image
+      config: tas-srt-gcp-pipeline-repo
+      vars: tas-srt-gcp-pipeline-repo
+    params:
+      OPSMAN_CONFIG_FILE: config/opsman.yml
+      STATE_FILE: state.yml
+      VARS_FILES: vars/vars/director.yml
+    ensure: &put-state
+      do:
+      - put: state
+        params:
+          file: generated-state/state.yml
+  - task: configure-authentication
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/configure-authentication.yml
+    attempts: 10
+    input_mapping:
+      env: tas-srt-gcp-pipeline-repo
+      config: tas-srt-gcp-pipeline-repo
+    params:
+      ENV_FILE: foundations/config/env.yml
+      AUTH_CONFIG_FILE: foundations/config/auth.yml
+  - task: configure-opsman
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/configure-opsman.yml
+    input_mapping:
+      env: tas-srt-gcp-pipeline-repo
+      config: tas-srt-gcp-pipeline-repo
+      vars: tas-srt-gcp-pipeline-repo
+    params:
+      ENV_FILE: foundations/config/env.yml
+      OPSMAN_CONFIG_FILE: config/opsman.yml
+      VARS_FILES: vars/vars/director.yml
+  - task: configure-director
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/configure-director.yml
+    input_mapping:
+      config: tas-srt-gcp-pipeline-repo
+      env: tas-srt-gcp-pipeline-repo
+      vars: tas-srt-gcp-pipeline-repo
+    params:
+      ENV_FILE: foundations/config/env.yml
+      DIRECTOR_CONFIG_FILE: config/director.yml
+      VARS_FILES: |
+        vars/vars/director.yml
+        vars/vars/tas.yml
+        vars/vars/pks.yml
+  - task: apply-director-changes
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/apply-director-changes.yml
+    input_mapping:
+      env: tas-srt-gcp-pipeline-repo
+    params:
+      ENV_FILE: foundations/config/env.yml
+  - task: export-installation
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/export-installation.yml
+    input_mapping:
+      env: tas-srt-gcp-pipeline-repo
+    params:
+      INSTALLATION_FILE: installation-$timestamp.zip
+      ENV_FILE: foundations/config/env.yml
+  - put: installation
+    params:
+      file: installation/installation*.zip
+
+
+
 
 - name: teardown-project
   serial: true
