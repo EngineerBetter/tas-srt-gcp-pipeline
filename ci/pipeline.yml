@@ -15,17 +15,25 @@ meta:
     PROJECT_NAME: ((project_name))
 
   prepare-tasks-with-secrets: &prepare-tasks-with-secrets
-    image: platform-automation-image
-    file: platform-automation-tasks/tasks/prepare-tasks-with-secrets.yml
-    input_mapping:
-      tasks: platform-automation-tasks
-      config: tas-srt-gcp-pipeline-repo
-      vars: tas-srt-gcp-pipeline-repo
-    params:
-      CONFIG_PATHS: config/config
-      VARS_PATHS: vars/vars
-    output_mapping:
-      tasks: platform-automation-tasks
+    do:
+    - in_parallel:
+      - get: project-account-and-bucket-terraform
+      - get: paving-terraform
+    - task: prepare-tasks-with-secrets
+      image: platform-automation-image
+      file: platform-automation-tasks/tasks/prepare-tasks-with-secrets.yml
+      input_mapping:
+        tasks: platform-automation-tasks
+        config: tas-srt-gcp-pipeline-repo
+        vars: tas-srt-gcp-pipeline-repo
+      params:
+        CONFIG_PATHS: config/config
+        VARS_PATHS: |
+          vars/vars
+          project-account-and-bucket-terraform/metadata
+          paving-terraform/metadata
+      output_mapping:
+        tasks: platform-automation-tasks
 
   prepare-image: &prepare-image
     image: platform-automation-image
@@ -316,8 +324,7 @@ jobs:
       trigger: true
       passed: [test-platform-automation]
     - get: state
-  - task: prepare-tasks-with-secrets
-    <<: *prepare-tasks-with-secrets
+  - <<: *prepare-tasks-with-secrets
   - task: prepare-image
     <<: *prepare-image
   - task: download-opsman-image
