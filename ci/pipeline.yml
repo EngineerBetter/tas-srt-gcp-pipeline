@@ -19,19 +19,44 @@ meta:
     - in_parallel:
       - get: project-account-and-bucket-terraform
       - get: paving-terraform
+      - get: concourse-tasks
+      - get: pcf-ops-image
+    - in_parallel:
+      - task: rename-project-account-and-bucket-terraform
+        file: tas-srt-gcp-pipeline-repo/ci/tasks/rename-metadata
+        image: pcf-ops-image
+        params:
+          NAME: project
+        input_mapping:
+          volume: project-account-and-bucket-terraform
+      - task: rename-paving-terraform
+        file: tas-srt-gcp-pipeline-repo/ci/tasks/rename-metadata
+        image: pcf-ops-image
+        params:
+          NAME: paving
+        input_mapping:
+          volume: paving-terraform
+    - task: combine-vars
+      file: concourse-tasks/combine-directories/task.yml
+      input_mapping:
+        src-1: tas-srt-gcp-pipeline-repo
+        src-2: project-account-and-bucket-terraform
+        src-3: paving-terraform
+      params:
+        SRC_1_GLOB: "vars/*"
+        SRC_2_GLOB: "*-metadata"
+        SRC_3_GLOB: "*-metadata"
+      output_mapping:
+        target: merged-vars
     - task: prepare-tasks-with-secrets
       image: platform-automation-image
       file: platform-automation-tasks/tasks/prepare-tasks-with-secrets.yml
       input_mapping:
         tasks: platform-automation-tasks
         config: tas-srt-gcp-pipeline-repo
-        vars: tas-srt-gcp-pipeline-repo
+        vars: merged-vars
       params:
         CONFIG_PATHS: config/config
-        VARS_PATHS: |
-          vars/vars
-          project-account-and-bucket-terraform/metadata
-          paving-terraform/metadata
       output_mapping:
         tasks: platform-automation-tasks
 
@@ -102,6 +127,11 @@ resources:
     uri: git@github.com:pivotal/paving.git
     private_key: ((git_private_key))
     branch: master
+
+- name: concourse-tasks
+  type: git
+  source:
+    uri: https://github.com/EngineerBetter/concourse-tasks.git
 
 - name: project-tfstate
   type: gcs
