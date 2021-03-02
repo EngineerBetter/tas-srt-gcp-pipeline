@@ -280,7 +280,7 @@ jobs:
   - in_parallel:
     - get: tas-srt-gcp-pipeline-repo
       trigger: true
-      passed: [pave-project]
+      passed: [set-pipeline]
     - get: project-account-and-bucket-terraform
     - get: paving-terraform
   - task: load-tfvars-into-credhub
