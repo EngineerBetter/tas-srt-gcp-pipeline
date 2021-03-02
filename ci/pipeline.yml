@@ -232,7 +232,6 @@ jobs:
     params:
       NAME: /concourse/((concourse_team))/((concourse_pipeline))/gcp_credentials_json
       VALUE: ((.:project-creds.gcp_credentials_json))
-      TYPE: json
       <<: *credhub-params
 
 - name: pave-project
