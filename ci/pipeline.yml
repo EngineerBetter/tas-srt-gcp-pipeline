@@ -285,7 +285,8 @@ jobs:
     - get: paving-terraform
   - task: load-tfvars-into-credhub
     file: tas-srt-gcp-pipeline-repo/ci/tasks/load-tfvars-into-credhub/task.yml
-    <<: *credhub-params
+    params:
+      <<: *credhub-params
 
 - name: test-platform-automation
   serial: true
