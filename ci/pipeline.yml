@@ -332,7 +332,8 @@ jobs:
         unpack: true
     - get: tas-srt-gcp-pipeline-repo
       trigger: true
-      passed: [test-platform-automation]
+      # passed: [test-platform-automation]
+      passed: [set-pipeline]
     - get: state
   - task: prepare-tasks-with-secrets
     <<: *prepare-tasks-with-secrets
