@@ -346,7 +346,6 @@ jobs:
       vars: tas-srt-gcp-pipeline-repo
     params:
       CONFIG_FILE: config/download-opsman.yml
-      SOURCE: s3
     output_mapping:
       downloaded-product: opsman-image
   - task: create-vm
