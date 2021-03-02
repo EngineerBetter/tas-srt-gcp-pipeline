@@ -359,7 +359,6 @@ jobs:
     params:
       OPSMAN_CONFIG_FILE: config/opsman.yml
       STATE_FILE: state.yml
-      VARS_FILES: vars/vars/director.yml
     ensure: &put-state
       do:
       - put: state
