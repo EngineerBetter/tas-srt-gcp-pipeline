@@ -14,12 +14,28 @@ meta:
     PROJECT_ID: ((gcp_project_id))
     PROJECT_NAME: ((project_name))
 
+  prepare-tasks-with-secrets: &prepare-tasks-with-secrets
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/prepare-tasks-with-secrets.yml
+    input_mapping:
+      tasks: platform-automation-tasks
+      config: configuration
+      vars: configuration
+    params:
+      CONFIG_PATHS: config/foundations/config config/foundations/((foundation))/config
+      VARS_PATHS: vars/foundations/((foundation))/vars
+    output_mapping:
+      tasks: platform-automation-tasks
+
 groups:
 - name: deploy
   jobs:
   - set-pipeline
   - setup-project
   - pave-project
+- name: fetch-dependencies
+  jobs:
+  - fetch-*
 - name: teardown
   jobs:
   - set-pipeline
@@ -37,6 +53,12 @@ resource_types:
   type: registry-image
   source:
     repository: frodenas/gcs-resource
+
+- name: pivnet
+  type: registry-image
+  source:
+    repository: pivotalcf/pivnet-resource
+    tag: latest-final
 
 resources:
 - name: tas-srt-gcp-pipeline-repo
@@ -69,9 +91,22 @@ resources:
   type: gcs
   icon: google-cloud
   source:
-    bucket: ((gcp_project_id))
-    json_key: ((inception_gcp_credentials_json))
+    <<: &gcs-source
+      bucket: ((gcp_project_id))
+      json_key: ((inception_gcp_credentials_json))
     versioned_file: ci/terraform.tfstate
+
+- name: platform-automation-tasks
+  type: gcs
+  source:
+    <<: *gcs-source
+    regexp: platform-automation-tasks-(.*).zip
+
+- name: platform-automation-image
+  type: gcs
+  source:
+    <<: *gcs-source
+    regexp: platform-automation-image-(.*).tgz
 
 - name: project-account-and-bucket-terraform
   type: terraform
@@ -109,6 +144,14 @@ resources:
   icon: docker
   source:
     repository: engineerbetter/pcf-ops
+
+- name: platform-automation-pivnet
+  type: pivnet
+  source:
+    api_token: ((pivnet_token))
+    product_slug: platform-automation
+    product_version: 5\.(.*)
+    sort_by: semver
 
 jobs:
 - name: set-pipeline
@@ -246,3 +289,17 @@ jobs:
       get_params: {action: destroy}
       vars:
         <<: *paving-vars
+
+- name: fetch-platform-automation
+  # We use the pivnet resource to bootstrap the pipeline,
+  # and because this product is part of the pipeline, not the foundation
+  plan:
+  - get: platform-automation-pivnet
+    trigger: true
+  - in_parallel:
+    - put: platform-automation-tasks
+      params:
+        file: platform-automation-pivnet/*tasks*.zip
+    - put: platform-automation-image
+      params:
+        file: platform-automation-pivnet/*image*.tgz
