@@ -15,63 +15,22 @@ meta:
     PROJECT_NAME: ((project_name))
 
   prepare-tasks-with-secrets: &prepare-tasks-with-secrets
-    do:
-    - in_parallel:
-      - get: project-account-and-bucket-terraform
-      - get: paving-terraform
-      - get: concourse-tasks
-      - get: pcf-ops-image
-    - in_parallel:
-      - load_var: project-tf
-        file: project-account-and-bucket-terraform/metadata
-        format: json
-      - load_var: paving-tf
-        file: paving-terraform/metadata
-        format: json
-    - in_parallel:
-      - task: rename-project-account-and-bucket-terraform
-        file: tas-srt-gcp-pipeline-repo/ci/tasks/rename-metadata/task.yml
-        image: pcf-ops-image
-        params:
-          NAME: project
-        input_mapping:
-          volume: project-account-and-bucket-terraform
-      - task: rename-paving-terraform
-        file: tas-srt-gcp-pipeline-repo/ci/tasks/rename-metadata/task.yml
-        image: pcf-ops-image
-        params:
-          NAME: paving
-        input_mapping:
-          volume: paving-terraform
-    - task: combine-vars
-      file: concourse-tasks/combine-directories/task.yml
-      input_mapping:
-        src-1: tas-srt-gcp-pipeline-repo
-        src-2: project-account-and-bucket-terraform
-        src-3: paving-terraform
-      params:
-        SRC_1_GLOB: "vars/*"
-        SRC_2_GLOB: "*-metadata"
-        SRC_3_GLOB: "*-metadata"
-      output_mapping:
-        target: merged-vars
-    - task: prepare-tasks-with-secrets
-      image: platform-automation-image
-      file: platform-automation-tasks/tasks/prepare-tasks-with-secrets.yml
-      input_mapping:
-        tasks: platform-automation-tasks
-        config: tas-srt-gcp-pipeline-repo
-        vars: merged-vars
-      params:
-        CONFIG_PATHS: config/config
-      output_mapping:
-        tasks: platform-automation-tasks
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/prepare-tasks-with-secrets.yml
+    input_mapping:
+      tasks: platform-automation-tasks
+      config: tas-srt-gcp-pipeline-repo
+      vars: merged-vars
+    params:
+      CONFIG_PATHS: config/config
+    output_mapping:
+      tasks: platform-automation-tasks
 
   prepare-image: &prepare-image
     image: platform-automation-image
     file: platform-automation-tasks/tasks/prepare-image.yml
     params:
-      CA_CERTS: ((.:project-tf.ssl_cert))
+      CA_CERTS: ((opsman-ssl.ca))
 
 groups:
 - name: deploy
@@ -79,6 +38,7 @@ groups:
   - set-pipeline
   - setup-project
   - pave-project
+  - load-tfvars-into-credhub
   - test-platform-automation
   - install-*
 - name: fetch-dependencies
@@ -134,11 +94,6 @@ resources:
     uri: git@github.com:pivotal/paving.git
     private_key: ((git_private_key))
     branch: master
-
-- name: concourse-tasks
-  type: git
-  source:
-    uri: https://github.com/EngineerBetter/concourse-tasks.git
 
 - name: project-tfstate
   type: gcs
@@ -319,6 +274,19 @@ jobs:
           ssl_private_key: ((.:project-creds.ssl_key))
           service_account_key: ((.:project-creds.gcp_credentials_json))
 
+- name: load-tfvars-into-credhub
+  serial: true
+  plan:
+  - in_parallel:
+    - get: tas-srt-gcp-pipeline-repo
+      trigger: true
+      passed: [pave-project]
+    - get: project-account-and-bucket-terraform
+    - get: paving-terraform
+  - task: load-tfvars-into-credhub
+    file: tas-srt-gcp-pipeline-repo/ci/tasks/load-tfvars-into-credhub/task.yml
+    <<: *credhub-params
+
 - name: test-platform-automation
   serial: true
   plan:
@@ -362,7 +330,8 @@ jobs:
       # passed: [test-platform-automation]
       passed: [set-pipeline]
     - get: state
-  - <<: *prepare-tasks-with-secrets
+  - task: prepare-tasks-with-secrets
+    <<: *prepare-tasks-with-secrets
   - task: prepare-image
     <<: *prepare-image
   - task: download-opsman-image
