@@ -18,6 +18,7 @@ resource "tls_self_signed_cert" "lb-cert" {
     "doppler.sys.${var.env}.${google_dns_managed_zone.tas-srt.dns_name}",
     "loggregator.sys.${var.env}.${google_dns_managed_zone.tas-srt.dns_name}",
     "ssh.sys.${var.env}.${google_dns_managed_zone.tas-srt.dns_name}",
+    "opsmanager.${var.env}.${google_dns_managed_zone.tas-srt.dns_name}",
     "tcp.${var.env}.${google_dns_managed_zone.tas-srt.dns_name}"
   ]
 

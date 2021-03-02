@@ -22,6 +22,13 @@ meta:
       - get: concourse-tasks
       - get: pcf-ops-image
     - in_parallel:
+      - load_var: project-tf
+        file: project-account-and-bucket-terraform/metadata
+        format: json
+      - load_var: paving-tf
+        file: paving-terraform/metadata
+        format: json
+    - in_parallel:
       - task: rename-project-account-and-bucket-terraform
         file: tas-srt-gcp-pipeline-repo/ci/tasks/rename-metadata/task.yml
         image: pcf-ops-image
@@ -64,7 +71,7 @@ meta:
     image: platform-automation-image
     file: platform-automation-tasks/tasks/prepare-image.yml
     params:
-      CA_CERTS: ((opsman-ssl.ca))
+      CA_CERTS: ((.:project-tf.ssl_cert))
 
 groups:
 - name: deploy
