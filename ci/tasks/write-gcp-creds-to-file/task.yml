@@ -1,5 +1,10 @@
 platform: linux
 
+image_resource:
+  type: registry-image
+  source:
+    repository: governmentpaas/cf-cli
+
 inputs:
 - name: tas-srt-gcp-pipeline-repo
 

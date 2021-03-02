@@ -334,7 +334,6 @@ jobs:
       trigger: true
       passed: [test-platform-automation]
     - get: state
-    - get: pcf-ops-image
   - task: prepare-tasks-with-secrets
     <<: *prepare-tasks-with-secrets
   - task: prepare-image
@@ -350,7 +349,6 @@ jobs:
     output_mapping:
       downloaded-product: opsman-image
   - task: write-gcp-creds-to-file
-    image: pcf-ops-image
     file: tas-srt-gcp-pipeline-repo/ci/tasks/write-gcp-creds-to-file/task.yml
     params:
       GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
