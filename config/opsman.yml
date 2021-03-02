@@ -1,0 +1,10 @@
+---
+opsman-configuration:
+  gcp:
+    gcp_service_account: ((gcp_credentials_json))
+    project: ((gcp_project_id))
+    region: ((region))
+    zone: ((region))-b
+    vpc_subnet: ((management_subnet_name))
+    public_ip: ((ops_manager_public_ip))
+    ssh_public_key: ((ops_manager_ssh_private_key))

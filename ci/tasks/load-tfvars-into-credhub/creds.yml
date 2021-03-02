@@ -7,3 +7,19 @@ credentials:
 - name: /concourse/((concourse_team))/((concourse_pipeline))/opsman_ssl
   type: value
   value: ((ssl_cert))
+
+- name: /concourse/((concourse_team))/((concourse_pipeline))/ops_manager_ssh_private_key
+  type: value
+  value: ((ops_manager_ssh_private_key))
+
+- name: /concourse/((concourse_team))/((concourse_pipeline))/ops_manager_public_ip
+  type: value
+  value: ((ops_manager_public_ip))
+
+- name: /concourse/((concourse_team))/((concourse_pipeline))/management_subnet_name
+  type: value
+  value: ((management_subnet_name))
+
+- name: /concourse/((concourse_team))/((concourse_pipeline))/region
+  type: value
+  value: ((region))
