@@ -389,6 +389,7 @@ jobs:
     params:
       ENV_FILE: config/env.yml
       OPSMAN_CONFIG_FILE: config/opsman.yml
+      VARS_FILES: vars/vars/((env)).yml
   - task: configure-director
     image: platform-automation-image
     file: platform-automation-tasks/tasks/configure-director.yml
