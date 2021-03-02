@@ -285,6 +285,8 @@ jobs:
         params:
           unpack: true
       - get: tas-srt-gcp-pipeline-repo
+        trigger: true
+        passed: [pave-project]
     - task: test-interpolate
       image: platform-automation-image
       file: platform-automation-tasks/tasks/test-interpolate.yml
@@ -311,6 +313,8 @@ jobs:
       params:
         unpack: true
     - get: tas-srt-gcp-pipeline-repo
+      trigger: true
+      passed: [test-platform-automation]
     - get: state
   - task: prepare-tasks-with-secrets
     <<: *prepare-tasks-with-secrets
