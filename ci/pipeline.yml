@@ -30,7 +30,7 @@ meta:
     image: platform-automation-image
     file: platform-automation-tasks/tasks/prepare-image.yml
     params:
-      CA_CERTS: ((opsman-ssl.ca))
+      CA_CERTS: ((opsman_ssl))
 
 groups:
 - name: deploy
@@ -288,6 +288,7 @@ jobs:
     image: pcf-ops-image
     file: tas-srt-gcp-pipeline-repo/ci/tasks/load-tfvars-into-credhub/task.yml
     params:
+      ENV: ((env))
       <<: *credhub-params
 
 - name: test-platform-automation

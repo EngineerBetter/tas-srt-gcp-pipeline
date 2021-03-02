@@ -1,0 +1,9 @@
+---
+credentials:
+- name: /concourse/((concourse_team))/((concourse_pipeline))/ops_manager_dns
+  type: value
+  value: ((ops_manager_dns))
+
+- name: /concourse/((concourse_team))/((concourse_pipeline))/opsman_ssl
+  type: value
+  value: ((ssl_cert))
