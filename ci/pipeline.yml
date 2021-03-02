@@ -23,14 +23,14 @@ meta:
       - get: pcf-ops-image
     - in_parallel:
       - task: rename-project-account-and-bucket-terraform
-        file: tas-srt-gcp-pipeline-repo/ci/tasks/rename-metadata
+        file: tas-srt-gcp-pipeline-repo/ci/tasks/rename-metadata/task.yml
         image: pcf-ops-image
         params:
           NAME: project
         input_mapping:
           volume: project-account-and-bucket-terraform
       - task: rename-paving-terraform
-        file: tas-srt-gcp-pipeline-repo/ci/tasks/rename-metadata
+        file: tas-srt-gcp-pipeline-repo/ci/tasks/rename-metadata/task.yml
         image: pcf-ops-image
         params:
           NAME: paving
