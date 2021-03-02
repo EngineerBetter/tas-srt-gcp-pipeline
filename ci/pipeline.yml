@@ -353,6 +353,7 @@ jobs:
     - get: tas-srt-gcp-pipeline-repo
       trigger: true
       # passed: [test-platform-automation]
+      passed: [set-pipeline]
     - get: state
   - <<: *prepare-tasks-with-secrets
   - task: prepare-image
