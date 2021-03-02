@@ -1,6 +1,6 @@
 ---
 pivnet-api-token: ((pivnet_token))
-pivnet-file-glob: "ops-manager-*.yml"       # must be quoted if starting with a *
+pivnet-file-glob: "ops-manager-gcp-*.yml"       # must be quoted if starting with a *
 pivnet-product-slug: ops-manager
 
 # Either product-version OR product-version-regex is required
