@@ -122,8 +122,8 @@ resources:
   source:
     <<: *gcs-source
     versioned_file: state.yml
-    initial_content_text: '{}'
-    initial_version: "0"
+    initial_content_text: "{}"
+    initial_version: "1"
 
 - name: installation
   type: gcs
@@ -356,8 +356,8 @@ jobs:
       env: tas-srt-gcp-pipeline-repo
       config: tas-srt-gcp-pipeline-repo
     params:
-      ENV_FILE: foundations/config/env.yml
-      AUTH_CONFIG_FILE: foundations/config/auth.yml
+      ENV_FILE: config/env.yml
+      AUTH_CONFIG_FILE: config/auth.yml
   - task: configure-opsman
     image: platform-automation-image
     file: platform-automation-tasks/tasks/configure-opsman.yml
@@ -366,7 +366,7 @@ jobs:
       config: tas-srt-gcp-pipeline-repo
       vars: tas-srt-gcp-pipeline-repo
     params:
-      ENV_FILE: foundations/config/env.yml
+      ENV_FILE: config/env.yml
       OPSMAN_CONFIG_FILE: config/opsman.yml
       VARS_FILES: vars/vars/director.yml
   - task: configure-director
@@ -377,7 +377,7 @@ jobs:
       env: tas-srt-gcp-pipeline-repo
       vars: tas-srt-gcp-pipeline-repo
     params:
-      ENV_FILE: foundations/config/env.yml
+      ENV_FILE: config/env.yml
       DIRECTOR_CONFIG_FILE: config/director.yml
       VARS_FILES: |
         vars/vars/director.yml
@@ -389,7 +389,7 @@ jobs:
     input_mapping:
       env: tas-srt-gcp-pipeline-repo
     params:
-      ENV_FILE: foundations/config/env.yml
+      ENV_FILE: config/env.yml
   - task: export-installation
     image: platform-automation-image
     file: platform-automation-tasks/tasks/export-installation.yml
@@ -397,7 +397,7 @@ jobs:
       env: tas-srt-gcp-pipeline-repo
     params:
       INSTALLATION_FILE: installation-$timestamp.zip
-      ENV_FILE: foundations/config/env.yml
+      ENV_FILE: config/env.yml
   - put: installation
     params:
       file: installation/installation*.zip
