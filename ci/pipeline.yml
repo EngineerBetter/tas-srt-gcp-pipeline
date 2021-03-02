@@ -283,7 +283,9 @@ jobs:
       passed: [set-pipeline]
     - get: project-account-and-bucket-terraform
     - get: paving-terraform
+    - get: pcf-ops-image
   - task: load-tfvars-into-credhub
+    image: pcf-ops-image
     file: tas-srt-gcp-pipeline-repo/ci/tasks/load-tfvars-into-credhub/task.yml
     params:
       <<: *credhub-params
