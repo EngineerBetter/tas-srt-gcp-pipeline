@@ -8,7 +8,7 @@ resource "tls_private_key" "private_key" {
 
 resource "acme_registration" "reg" {
   account_key_pem = tls_private_key.private_key.private_key_pem
-  email_address   = "tas-${var.env}@engineerbetter.com"
+  email_address   = "${var.env}-tas@engineerbetter.com"
 }
 
 resource "acme_certificate" "apps" {
