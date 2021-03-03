@@ -17,7 +17,7 @@ resource "acme_registration" "reg" {
 
 resource "acme_certificate" "apps" {
   account_key_pem = acme_registration.reg.account_key_pem
-  common_name     = google_dns_managed_zone.tas-srt.dns_name
+  common_name     = local.trimmed_zone
   subject_alternative_names = [
     "*.sys.${var.env}.${local.trimmed_zone}",
     "*.apps.${var.env}.${local.trimmed_zone}",
