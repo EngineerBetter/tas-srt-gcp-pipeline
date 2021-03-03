@@ -23,7 +23,8 @@ resource "acme_certificate" "apps" {
     "*.apps.${var.env}.${local.trimmed_zone}",
     "*.ws.${var.env}.${local.trimmed_zone}",
     "opsmanager.${var.env}.${local.trimmed_zone}",
-    "tcp.${var.env}.${local.trimmed_zone}"
+    "tcp.${var.env}.${local.trimmed_zone}",
+    "*.login.${var.env}.${local.trimmed_zone}"
   ]
 
   dns_challenge {
