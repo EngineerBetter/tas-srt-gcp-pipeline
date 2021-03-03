@@ -1,17 +1,22 @@
-resource "tls_private_key" "lb-key" {
+provider "acme" {
+  server_url = "https://acme-v02.api.letsencrypt.org/directory"
+}
+
+resource "tls_private_key" "private_key" {
   algorithm = "RSA"
 }
 
-resource "tls_self_signed_cert" "lb-cert" {
-  key_algorithm   = "RSA"
-  private_key_pem = tls_private_key.lb-key.private_key_pem
+resource "acme_registration" "reg" {
+  account_key_pem = tls_private_key.private_key.private_key_pem
+  email_address   = "ebkf-${var.env}@engineerbetter.com"
+}
 
-  subject {
-    common_name  = google_dns_managed_zone.tas-srt.dns_name
-    organization = "foobar"
-  }
+data "google_project" "current_project" {}
 
-  dns_names = [
+resource "acme_certificate" "apps" {
+  account_key_pem = acme_registration.reg.account_key_pem
+  common_name     = google_dns_managed_zone.tas-srt.dns_name
+  subject_alternative_names = [
     "*.sys.${var.env}.${google_dns_managed_zone.tas-srt.dns_name}",
     "*.apps.${var.env}.${google_dns_managed_zone.tas-srt.dns_name}",
     "*.ws.${var.env}.${google_dns_managed_zone.tas-srt.dns_name}",
@@ -22,11 +27,11 @@ resource "tls_self_signed_cert" "lb-cert" {
     "tcp.${var.env}.${google_dns_managed_zone.tas-srt.dns_name}"
   ]
 
-  validity_period_hours = 12
-
-  allowed_uses = [
-    "key_encipherment",
-    "digital_signature",
-    "server_auth",
-  ]
+  dns_challenge {
+    provider = "gcloud"
+    config = {
+      GCE_PROJECT             = trimprefix(data.google_project.current_project.project_id, "project/")
+      GCE_PROPAGATION_TIMEOUT = "600"
+    }
+  }
 }

@@ -19,11 +19,11 @@ output "available_zones" {
 }
 
 output "ssl_key" {
-  value = tls_private_key.lb-key.private_key_pem
+  value = tls_private_key.private_key.private_key_pem
 }
 
 output "ssl_cert" {
-  value = tls_self_signed_cert.lb-cert.cert_pem
+  value = acme_certificate.apps.certificate_pem
 }
 
 output "gcp_service_account_email" {
