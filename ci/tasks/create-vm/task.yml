@@ -46,7 +46,7 @@ params:
   OM_VAR_management_subnet_name: ((management_subnet_name))
   OM_VAR_ops_manager_dns: ((ops_manager_dns))
   OM_VAR_ops_manager_public_ip: ((ops_manager_public_ip))
-  OM_VAR_ops_manager_ssh_private_key: ((ops_manager_ssh_private_key))
+  OM_VAR_ops_manager_ssh_public_key: ((ops_manager_ssh_public_key))
   OM_VAR_ops_manager_tags: ((ops_manager_tags))
   OM_VAR_opsman_decryption_passphrase: ((opsman_decryption_passphrase))
   OM_VAR_opsman_password: ((opsman_password))
