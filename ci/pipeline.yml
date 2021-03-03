@@ -363,7 +363,8 @@ jobs:
     params:
       OPSMAN_CONFIG_FILE: config/opsman.yml
       STATE_FILE: state.yml
-      VARS_FILES: vars/vars/((env)).yml vars/vars/g_creds.yml
+      VARS_FILES: vars/vars/((env)).yml
+      GOOGLE_APPLICATION_CREDENTIALS: vars/vars/gcp_creds.json
     ensure: &put-state
       do:
       - put: state
