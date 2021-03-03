@@ -8,10 +8,8 @@ resource "tls_private_key" "private_key" {
 
 resource "acme_registration" "reg" {
   account_key_pem = tls_private_key.private_key.private_key_pem
-  email_address   = "ebkf-${var.env}@engineerbetter.com"
+  email_address   = "tas-${var.env}@engineerbetter.com"
 }
-
-data "google_project" "current_project" {}
 
 resource "acme_certificate" "apps" {
   account_key_pem = acme_registration.reg.account_key_pem
@@ -30,7 +28,7 @@ resource "acme_certificate" "apps" {
   dns_challenge {
     provider = "gcloud"
     config = {
-      GCE_PROJECT             = trimprefix(data.google_project.current_project.project_id, "project/")
+      GCE_PROJECT             = var.project_id
       GCE_PROPAGATION_TIMEOUT = "600"
     }
   }
