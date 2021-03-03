@@ -353,9 +353,9 @@ jobs:
     file: tas-srt-gcp-pipeline-repo/ci/tasks/write-gcp-creds-to-file/task.yml
     params:
       GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
-  - task: create-vm
+  - task: create-vm-custom
     image: platform-automation-image
-    file: platform-automation-tasks/tasks/create-vm.yml
+    file: tas-srt-gcp-pipeline-repo/ci/tasks/create-vm/task.yml
     input_mapping:
       image: opsman-image
       config: tas-srt-gcp-pipeline-repo
@@ -364,7 +364,6 @@ jobs:
       OPSMAN_CONFIG_FILE: config/opsman.yml
       STATE_FILE: state.yml
       VARS_FILES: vars/vars/((env)).yml
-      GOOGLE_APPLICATION_CREDENTIALS: vars/vars/gcp_creds.json
     ensure: &put-state
       do:
       - put: state
