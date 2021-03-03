@@ -22,9 +22,6 @@ resource "acme_certificate" "apps" {
     "*.sys.${var.env}.${local.trimmed_zone}",
     "*.apps.${var.env}.${local.trimmed_zone}",
     "*.ws.${var.env}.${local.trimmed_zone}",
-    "doppler.sys.${var.env}.${local.trimmed_zone}",
-    "loggregator.sys.${var.env}.${local.trimmed_zone}",
-    "ssh.sys.${var.env}.${local.trimmed_zone}",
     "opsmanager.${var.env}.${local.trimmed_zone}",
     "tcp.${var.env}.${local.trimmed_zone}"
   ]
