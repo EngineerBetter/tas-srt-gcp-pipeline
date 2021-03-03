@@ -390,18 +390,18 @@ jobs:
       ENV_FILE: config/env.yml
       OPSMAN_CONFIG_FILE: config/opsman.yml
       VARS_FILES: vars/vars/((env)).yml
-  - task: configure-director
-    image: platform-automation-image
-    file: platform-automation-tasks/tasks/configure-director.yml
-    input_mapping:
-      config: tas-srt-gcp-pipeline-repo
-      env: tas-srt-gcp-pipeline-repo
-      vars: tas-srt-gcp-pipeline-repo
-    params:
-      ENV_FILE: config/env.yml
-      DIRECTOR_CONFIG_FILE: config/director.yml
-      VARS_FILES: |
-        vars/vars/((env)).yml
+  # - task: configure-director
+  #   image: platform-automation-image
+  #   file: platform-automation-tasks/tasks/configure-director.yml
+  #   input_mapping:
+  #     config: tas-srt-gcp-pipeline-repo
+  #     env: tas-srt-gcp-pipeline-repo
+  #     vars: tas-srt-gcp-pipeline-repo
+  #   params:
+  #     ENV_FILE: config/env.yml
+  #     DIRECTOR_CONFIG_FILE: config/director.yml
+  #     VARS_FILES: |
+  #       vars/vars/((env)).yml
   - task: apply-director-changes
     image: platform-automation-image
     file: platform-automation-tasks/tasks/apply-director-changes.yml
