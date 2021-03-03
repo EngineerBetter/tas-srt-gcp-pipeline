@@ -19,7 +19,7 @@ output "available_zones" {
 }
 
 output "ssl_key" {
-  value = tls_private_key.private_key.private_key_pem
+  value = tls_private_key.private_key2.private_key_pem
 }
 
 output "ssl_cert" {
