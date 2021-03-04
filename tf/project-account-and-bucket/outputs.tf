@@ -26,6 +26,9 @@ output "ssl_cert" {
   value = acme_certificate.apps.certificate_pem
 }
 
+output "ssl_issuer" {
+  value = acme_certificate.apps.issuer_pem
+}
 output "gcp_service_account_email" {
   value = google_service_account.ci_bot.email
 }
