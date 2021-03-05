@@ -32,3 +32,7 @@ output "ssl_issuer" {
 output "gcp_service_account_email" {
   value = google_service_account.ci_bot.email
 }
+
+output "credhub_encryption_key" {
+  value = random_string.credhub_encryption_key.result
+}
