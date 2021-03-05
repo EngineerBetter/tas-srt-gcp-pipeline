@@ -1,8 +1,10 @@
 ---
 pivnet-api-token: ((pivnet_token))
-pivnet-file-glob: "srt-*.pivotal"       # must be quoted if starting with a *
+pivnet-file-glob: "srt-*.pivotal" # must be quoted if starting with a *
 pivnet-product-slug: elastic-runtime
 
 # Either product-version OR product-version-regex is required
 # product-version-regex: ^1\.2\..*$ # must not be quoted
 product-version: 2.7.31
+
+stemcell-iaas: google
