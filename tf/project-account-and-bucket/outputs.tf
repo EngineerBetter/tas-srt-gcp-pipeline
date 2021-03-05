@@ -3,7 +3,8 @@ output "project_number" {
 }
 
 output "gcp_credentials_json" {
-  value = base64decode(google_service_account_key.ci_bot_key.private_key)
+  value     = base64decode(google_service_account_key.ci_bot_key.private_key)
+  sensitive = true
 }
 
 output "zone_name" {
@@ -19,7 +20,8 @@ output "available_zones" {
 }
 
 output "ssl_key" {
-  value = acme_certificate.apps.private_key_pem
+  value     = acme_certificate.apps.private_key_pem
+  sensitive = true
 }
 
 output "ssl_cert" {
@@ -34,5 +36,6 @@ output "gcp_service_account_email" {
 }
 
 output "credhub_encryption_key" {
-  value = random_string.credhub_encryption_key.result
+  value     = random_string.credhub_encryption_key.result
+  sensitive = true
 }
