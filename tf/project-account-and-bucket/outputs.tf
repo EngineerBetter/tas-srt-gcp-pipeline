@@ -39,3 +39,8 @@ output "credhub_encryption_key" {
   value     = random_string.credhub_encryption_key.result
   sensitive = true
 }
+
+output "opsman_password" {
+  value     = random_string.opsman_password.result
+  sensitive = true
+}

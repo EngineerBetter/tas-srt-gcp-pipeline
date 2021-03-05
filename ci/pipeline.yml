@@ -342,6 +342,9 @@ jobs:
     <<: *prepare-tasks-with-secrets
   - task: prepare-image
     <<: *prepare-image
+  - load_var: project-account-and-bucket-terraform
+    file: project-account-and-bucket-terraform/metadata
+    format: json
   - task: download-opsman-image
     image: platform-automation-image
     file: platform-automation-tasks/tasks/download-product.yml
@@ -382,6 +385,8 @@ jobs:
     params:
       ENV_FILE: config/env.yml
       AUTH_CONFIG_FILE: config/auth.yml
+      OM_VARS_ENV: OM_VAR
+      OM_VAR_opsman_password: ((.:project-account-and-bucket-terraform.opsman_password))
   - task: configure-opsman
     image: platform-automation-image
     file: platform-automation-tasks/tasks/configure-opsman.yml
@@ -393,9 +398,6 @@ jobs:
       ENV_FILE: config/env.yml
       OPSMAN_CONFIG_FILE: config/opsman.yml
       VARS_FILES: vars/vars/((env)).yml
-  - load_var: project-account-and-bucket-terraform
-    file: project-account-and-bucket-terraform/metadata
-    format: json
   - task: configure-director
     image: platform-automation-image
     file: platform-automation-tasks/tasks/configure-director.yml
