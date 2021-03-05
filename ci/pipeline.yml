@@ -403,9 +403,9 @@ jobs:
       DIRECTOR_CONFIG_FILE: config/director.yml
       VARS_FILES: |
         vars/vars/((env)).yml
-  - task: apply-director-changes
+  - task: apply-director-changes-custom
     image: platform-automation-image
-    file: platform-automation-tasks/tasks/apply-director-changes.yml
+    file: tas-srt-gcp-pipeline-repo/ci/tasks/apply-director-changes/task.yml
     input_mapping:
       env: tas-srt-gcp-pipeline-repo
     params:
