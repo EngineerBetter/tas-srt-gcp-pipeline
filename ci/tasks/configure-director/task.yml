@@ -18,6 +18,7 @@ params:
 
 inputs:
 - name: tas-srt-gcp-pipeline-repo
+- name: platform-automation-tasks
 - name: config
 - name: env
 - name: vars
