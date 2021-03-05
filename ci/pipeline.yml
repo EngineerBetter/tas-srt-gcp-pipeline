@@ -422,8 +422,63 @@ jobs:
     params:
       file: installation/installation*.zip
 
-
-
+- name: configure-tas
+  serial: true
+  serial_groups: [ install ]
+  plan:
+  - in_parallel:
+    - get: platform-automation-image
+      params:
+        unpack: true
+    - get: one-time-trigger
+      trigger: true
+    - get: platform-automation-tasks
+      params:
+        unpack: true
+    - get: tas-srt-gcp-pipeline-repo
+      trigger: true
+      # passed: [test-platform-automation]
+      passed: [set-pipeline]
+    - get: state
+  - task: prepare-tasks-with-secrets
+    <<: *prepare-tasks-with-secrets
+  - task: prepare-image
+    <<: *prepare-image
+  - task: download-tas
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/download-product.yml
+    input_mapping:
+      config: tas-srt-gcp-pipeline-repo
+    params:
+      CONFIG_FILE: config/download-tas.yml
+      SOURCE: pivnet
+    output_mapping:
+      downloaded-product: tas-product
+      downloaded-stemcell: tas-stemcell
+  - task: upload-tas-product
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/upload-product.yml
+    input_mapping:
+      product: tas-product
+      env: tas-srt-gcp-pipeline-repo
+    params:
+      ENV_FILE: config/env.yml
+  - task: upload-tas-stemcell
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/upload-stemcell.yml
+    input_mapping:
+      env: tas-srt-gcp-pipeline-repo
+      stemcell: tas-stemcell
+    params:
+      ENV_FILE: config/env.yml
+  - task: stage-tas
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/stage-product.yml
+    input_mapping:
+      product: tas-product
+      env: tas-srt-gcp-pipeline-repo
+    params:
+      ENV_FILE: config/env.yml
 
 - name: teardown-project
   serial: true
