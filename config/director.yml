@@ -22,7 +22,7 @@ networks-configuration:
   networks:
     - name: dev-network
       subnets:
-        - iaas_identifier: dev-management-subnet
+        - iaas_identifier: dev-network/dev-management-subnet/europe-west2
           cidr: 10.0.0.0/26
           dns: 8.8.8.8,8.8.4.4
           gateway: 10.0.0.1
@@ -31,7 +31,7 @@ networks-configuration:
             - europe-west2-a
             - europe-west2-b
             - europe-west2-c
-        - iaas_identifier: dev-services-subnet
+        - iaas_identifier: dev-network/dev-services-subnet/europe-west2
           cidr: 10.0.8.0/24
           dns: 8.8.8.8,8.8.4.4
           gateway: 10.0.8.1
