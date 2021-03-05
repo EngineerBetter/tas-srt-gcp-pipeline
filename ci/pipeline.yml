@@ -338,12 +338,16 @@ jobs:
       passed: [set-pipeline]
     - get: state
     - get: project-account-and-bucket-terraform
+    - get: paving
   - task: prepare-tasks-with-secrets
     <<: *prepare-tasks-with-secrets
   - task: prepare-image
     <<: *prepare-image
   - load_var: project-account-and-bucket-terraform
     file: project-account-and-bucket-terraform/metadata
+    format: json
+  - load_var: paving-terraform
+    file: paving/metadata
     format: json
   - task: download-opsman-image
     image: platform-automation-image
@@ -387,6 +391,13 @@ jobs:
       AUTH_CONFIG_FILE: config/auth.yml
       OM_VARS_ENV: OM_VAR
       OM_VAR_opsman_password: ((.:project-account-and-bucket-terraform.opsman_password))
+      OM_VAR_project: ((.:paving-terraform.project))
+      OM_VAR_region: ((.:paving-terraform.stable_config_opsmanager.region))
+      OM_VAR_zone: ((.:paving-terraform.stable_config_opsmanager.region))-b
+      OM_VAR_management_subnet_name: ((.:paving-terraform.stable_config_opsmanager.management_subnet_name))
+      OM_VAR_ops_manager_public_ip: ((.:paving-terraform.stable_config_opsmanager.ops_manager_public_ip))
+      OM_VAR_ops_manager_ssh_public_key: ((.:paving-terraform.stable_config_opsmanager.ops_manager_ssh_public_key))
+      OM_VAR_ops_manager_tags: ((.:paving-terraform.stable_config_opsmanager.ops_manager_tags))
   - task: configure-opsman
     image: platform-automation-image
     file: platform-automation-tasks/tasks/configure-opsman.yml

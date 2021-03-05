@@ -2,9 +2,9 @@
 opsman-configuration:
   gcp:
     gcp_service_account_name: dev-ops-manager@srt-test-1.iam.gserviceaccount.com
-    project: ((gcp_project_id))
+    project: ((project))
     region: ((region))
-    zone: ((region))-b
+    zone: ((zone))
     vpc_subnet: ((management_subnet_name))
     public_ip: ((ops_manager_public_ip))
     ssh_public_key: |
