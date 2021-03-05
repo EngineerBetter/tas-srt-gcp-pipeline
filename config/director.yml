@@ -35,7 +35,7 @@ networks-configuration:
           cidr: 10.0.8.0/24
           dns: 8.8.8.8,8.8.4.4
           gateway: 10.0.8.1
-          reserved_ip_ranges: 10.0.0.0-10.0.0.10
+          reserved_ip_ranges: 10.0.8.0-10.0.8.10
           availability_zone_names:
             - europe-west2-a
             - europe-west2-b
