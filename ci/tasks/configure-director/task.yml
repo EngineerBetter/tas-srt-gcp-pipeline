@@ -15,7 +15,6 @@ params:
   OM_VARS_ENV: OM_VAR
   OPS_FILES: ""
   VARS_FILES: ""
-  GCP_CREDENTIALS_JSON
 
 inputs:
 - name: tas-srt-gcp-pipeline-repo
