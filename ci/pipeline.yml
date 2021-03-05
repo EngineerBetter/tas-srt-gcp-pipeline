@@ -393,7 +393,7 @@ jobs:
       VARS_FILES: vars/vars/((env)).yml
   - task: configure-director
     image: platform-automation-image
-    file: tas-srt-gcp-pipeline-repo/ci/tasks/configure-director/task.yml
+    file: platform-automation-tasks/tasks/configure-director.yml
     input_mapping:
       config: tas-srt-gcp-pipeline-repo
       env: tas-srt-gcp-pipeline-repo
@@ -405,7 +405,7 @@ jobs:
         vars/vars/((env)).yml
   - task: apply-director-changes-custom
     image: platform-automation-image
-    file: tas-srt-gcp-pipeline-repo/ci/tasks/apply-director-changes/task.yml
+    file: platform-automation-tasks/tasks/apply-director-changes.yml
     input_mapping:
       env: tas-srt-gcp-pipeline-repo
     params:

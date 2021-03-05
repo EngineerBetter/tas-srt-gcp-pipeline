@@ -1,16 +1,16 @@
 az-configuration:
-- name: europe-west2-a
-  iaas_configuration_name: default
-- name: europe-west2-b
-  iaas_configuration_name: default
-- name: europe-west2-c
-  iaas_configuration_name: default
+  - name: europe-west2-a
+    iaas_configuration_name: default
+  - name: europe-west2-b
+    iaas_configuration_name: default
+  - name: europe-west2-c
+    iaas_configuration_name: default
 iaas-configurations:
-- additional_cloud_properties: {}
-  associated_service_account: 46568272496-compute@developer.gserviceaccount.com
-  default_deployment_tag: pcf-vms
-  name: default
-  project: srt-test-1
+  - additional_cloud_properties: {}
+    associated_service_account: dev-ops-manager@srt-test-1.iam.gserviceaccount.com
+    default_deployment_tag: pcf-vms
+    name: default
+    project: srt-test-1
 network-assignment:
   network:
     name: dev-network
@@ -20,26 +20,26 @@ network-assignment:
 networks-configuration:
   icmp_checks_enabled: false
   networks:
-  - name: dev-network
-    subnets:
-    - iaas_identifier: dev-management-subnet
-      cidr: 10.0.0.0/26
-      dns: 8.8.8.8,8.8.4.4
-      gateway: 10.0.0.1
-      reserved_ip_ranges: ""
-      availability_zone_names:
-      - europe-west2-a
-      - europe-west2-b
-      - europe-west2-c
-    - iaas_identifier: dev-services-subnet
-      cidr: 10.0.8.0/24
-      dns: 8.8.8.8,8.8.4.4
-      gateway: 10.0.8.1
-      reserved_ip_ranges: ""
-      availability_zone_names:
-      - europe-west2-a
-      - europe-west2-b
-      - europe-west2-c
+    - name: dev-network
+      subnets:
+        - iaas_identifier: dev-management-subnet
+          cidr: 10.0.0.0/26
+          dns: 8.8.8.8,8.8.4.4
+          gateway: 10.0.0.1
+          reserved_ip_ranges: 10.0.0.0-10.0.0.10
+          availability_zone_names:
+            - europe-west2-a
+            - europe-west2-b
+            - europe-west2-c
+        - iaas_identifier: dev-services-subnet
+          cidr: 10.0.8.0/24
+          dns: 8.8.8.8,8.8.4.4
+          gateway: 10.0.8.1
+          reserved_ip_ranges: 10.0.0.0-10.0.0.10
+          availability_zone_names:
+            - europe-west2-a
+            - europe-west2-b
+            - europe-west2-c
 properties-configuration:
   director_configuration:
     blobstore_type: local
@@ -95,4 +95,3 @@ resource-configuration:
     swap_as_percent_of_memory_size: automatic
 vmextensions-configuration: []
 vmtypes-configuration: {}
-
