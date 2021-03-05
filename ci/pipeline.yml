@@ -337,6 +337,7 @@ jobs:
       # passed: [test-platform-automation]
       passed: [set-pipeline]
     - get: state
+    - get: project-account-and-bucket-terraform
   - task: prepare-tasks-with-secrets
     <<: *prepare-tasks-with-secrets
   - task: prepare-image
@@ -392,6 +393,9 @@ jobs:
       ENV_FILE: config/env.yml
       OPSMAN_CONFIG_FILE: config/opsman.yml
       VARS_FILES: vars/vars/((env)).yml
+  - load_var: project-account-and-bucket-terraform
+    file: project-account-and-bucket-terraform/metadata
+    format: json
   - task: configure-director
     image: platform-automation-image
     file: platform-automation-tasks/tasks/configure-director.yml
@@ -404,6 +408,8 @@ jobs:
       DIRECTOR_CONFIG_FILE: config/director.yml
       VARS_FILES: |
         vars/vars/((env)).yml
+      OM_VARS_ENV: OM_VAR
+      OM_VAR_ssl_issuer: ((.:project-account-and-bucket-terraform.ssl_issuer))
   - task: apply-director-changes-custom
     image: platform-automation-image
     file: platform-automation-tasks/tasks/apply-director-changes.yml
