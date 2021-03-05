@@ -1,0 +1,8 @@
+---
+pivnet-api-token: ((pivnet_token))
+pivnet-file-glob: "*google*"
+pivnet-product-slug: stemcells-ubuntu-xenial
+
+# Either product-version OR product-version-regex is required
+# product-version-regex: ^250\..*$  # must not be quoted
+product-version: "456.137"

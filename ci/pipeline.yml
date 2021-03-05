@@ -455,7 +455,16 @@ jobs:
       SOURCE: pivnet
     output_mapping:
       downloaded-product: tas-product
-      downloaded-stemcell: tas-stemcell
+  - task: download-stemcell
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/download-product.yml
+    input_mapping:
+      config: tas-srt-gcp-pipeline-repo
+    params:
+      CONFIG_FILE: config/download-tas-stemcell.yml
+      SOURCE: pivnet
+    output_mapping:
+      downloaded-product: tas-stemcell
   - task: upload-tas-product
     image: platform-automation-image
     file: platform-automation-tasks/tasks/upload-product.yml
