@@ -42,6 +42,7 @@ groups:
   - load-tfvars-into-credhub
   - test-platform-automation
   - install-*
+  - configure-*
 - name: fetch-dependencies
   jobs:
   - fetch-*
