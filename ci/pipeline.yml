@@ -32,6 +32,9 @@ meta:
     file: platform-automation-tasks/tasks/prepare-image.yml
     params:
       CA_CERTS: ((opsman_ssl))
+      OM_VAR_project: ((.:paving-terraform.project))
+      OM_VAR_zone: ((.:paving-terraform.stable_config_opsmanager.region))-b
+      OM_VAR_ssl_issuer: ((.:project-account-and-bucket-terraform.ssl_issuer))
 
 groups:
 - name: deploy
@@ -313,16 +316,16 @@ jobs:
     - get: state
     - get: project-account-and-bucket-terraform
     - get: paving
-  - task: prepare-tasks-with-secrets
-    <<: *prepare-tasks-with-secrets
-  - task: prepare-image
-    <<: *prepare-image
   - load_var: project-account-and-bucket-terraform
     file: project-account-and-bucket-terraform/metadata
     format: json
   - load_var: paving-terraform
     file: paving/metadata
     format: json
+  - task: prepare-tasks-with-secrets
+    <<: *prepare-tasks-with-secrets
+  - task: prepare-image
+    <<: *prepare-image
   - task: download-opsman-image
     image: platform-automation-image
     file: platform-automation-tasks/tasks/download-product.yml
@@ -433,6 +436,14 @@ jobs:
       trigger: true
       passed: [install-opsman]
     - get: state
+    - get: project-account-and-bucket-terraform
+    - get: paving
+  - load_var: project-account-and-bucket-terraform
+    file: project-account-and-bucket-terraform/metadata
+    format: json
+  - load_var: paving-terraform
+    file: paving/metadata
+    format: json
   - task: prepare-tasks-with-secrets
     <<: *prepare-tasks-with-secrets
   - task: prepare-image
@@ -501,6 +512,14 @@ jobs:
     - get: tas-srt-gcp-pipeline-repo
       trigger: true
       passed: [configure-tas]
+    - get: project-account-and-bucket-terraform
+    - get: paving
+  - load_var: project-account-and-bucket-terraform
+    file: project-account-and-bucket-terraform/metadata
+    format: json
+  - load_var: paving-terraform
+    file: paving/metadata
+    format: json
   - task: prepare-tasks-with-secrets
     <<: *prepare-tasks-with-secrets
   - task: prepare-image
