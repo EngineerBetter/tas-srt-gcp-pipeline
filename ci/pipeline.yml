@@ -40,6 +40,7 @@ groups:
   - setup-project
   - pave-project
   - load-tfvars-into-credhub
+  - apply-changes
   - install-*
   - configure-*
 - name: fetch-dependencies
