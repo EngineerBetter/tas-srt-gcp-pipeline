@@ -182,17 +182,6 @@ resources:
     product_version: 5\.(.*)
     sort_by: semver
 
-# Triggers
-- name: one-time-trigger
-  type: time
-  source:
-    interval: 999999h
-
-# - name: daily-trigger
-#   type: time
-#   source:
-#     interval: 24h
-
 jobs:
 - name: set-pipeline
   serial: true
@@ -288,7 +277,9 @@ jobs:
       trigger: true
       passed: [pave-project]
     - get: project-account-and-bucket-terraform
+      passed: [pave-project]
     - get: paving-terraform
+      passed: [pave-project]
     - get: pcf-ops-image
   - task: load-tfvars-into-credhub
     image: pcf-ops-image
@@ -305,8 +296,6 @@ jobs:
     - get: platform-automation-image
       params:
         unpack: true
-    - get: one-time-trigger
-      trigger: true
     - get: platform-automation-tasks
       params:
         unpack: true
@@ -315,12 +304,14 @@ jobs:
       passed: [load-tfvars-into-credhub]
     - get: state
     - get: project-account-and-bucket-terraform
-    - get: paving
+      passed: [load-tfvars-into-credhub]
+    - get: paving-terraform
+      passed: [load-tfvars-into-credhub]
   - load_var: project-account-and-bucket-terraform
     file: project-account-and-bucket-terraform/metadata
     format: json
   - load_var: paving-terraform
-    file: paving/metadata
+    file: paving-terraform/metadata
     format: json
   - task: prepare-tasks-with-secrets
     <<: *prepare-tasks-with-secrets
@@ -427,22 +418,21 @@ jobs:
     - get: platform-automation-image
       params:
         unpack: true
-    - get: one-time-trigger
-      trigger: true
     - get: platform-automation-tasks
       params:
         unpack: true
     - get: tas-srt-gcp-pipeline-repo
       trigger: true
       passed: [install-opsman]
-    - get: state
     - get: project-account-and-bucket-terraform
-    - get: paving
+      passed: [install-opsman]
+    - get: paving-terraform
+      passed: [install-opsman]
   - load_var: project-account-and-bucket-terraform
     file: project-account-and-bucket-terraform/metadata
     format: json
   - load_var: paving-terraform
-    file: paving/metadata
+    file: paving-terraform/metadata
     format: json
   - task: prepare-tasks-with-secrets
     <<: *prepare-tasks-with-secrets
@@ -504,8 +494,6 @@ jobs:
     - get: platform-automation-image
       params:
         unpack: true
-    - get: one-time-trigger
-      trigger: true
     - get: platform-automation-tasks
       params:
         unpack: true
@@ -513,12 +501,14 @@ jobs:
       trigger: true
       passed: [configure-tas]
     - get: project-account-and-bucket-terraform
-    - get: paving
+      passed: [configure-tas]
+    - get: paving-terraform
+      passed: [configure-tas]
   - load_var: project-account-and-bucket-terraform
     file: project-account-and-bucket-terraform/metadata
     format: json
   - load_var: paving-terraform
-    file: paving/metadata
+    file: paving-terraform/metadata
     format: json
   - task: prepare-tasks-with-secrets
     <<: *prepare-tasks-with-secrets
