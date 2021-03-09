@@ -319,9 +319,9 @@ jobs:
     <<: *prepare-tasks-with-secrets
   - task: prepare-image
     <<: *prepare-image
-        OM_VAR_project: ((.:paving-terraform.stable_config_opsmanager.project))
-        OM_VAR_zone: ((.:paving-terraform.stable_config_opsmanager.region))-b
-        OM_VAR_ssl_issuer: ((.:project-account-and-bucket-terraform.ssl_issuer))
+      OM_VAR_project: ((.:paving-terraform.stable_config_opsmanager.project))
+      OM_VAR_zone: ((.:paving-terraform.stable_config_opsmanager.region))-b
+      OM_VAR_ssl_issuer: ((.:project-account-and-bucket-terraform.ssl_issuer))
   - task: download-opsman-image
     image: platform-automation-image
     file: platform-automation-tasks/tasks/download-product.yml
@@ -445,9 +445,9 @@ jobs:
     <<: *prepare-tasks-with-secrets
   - task: prepare-image
     <<: *prepare-image
-        OM_VAR_project: ((.:paving-terraform.stable_config_opsmanager.project))
-        OM_VAR_zone: ((.:paving-terraform.stable_config_opsmanager.region))-b
-        OM_VAR_ssl_issuer: ((.:project-account-and-bucket-terraform.ssl_issuer))
+      OM_VAR_project: ((.:paving-terraform.stable_config_opsmanager.project))
+      OM_VAR_zone: ((.:paving-terraform.stable_config_opsmanager.region))-b
+      OM_VAR_ssl_issuer: ((.:project-account-and-bucket-terraform.ssl_issuer))
   - in_parallel:
     - do:
       - task: download-stemcell
@@ -526,9 +526,9 @@ jobs:
     <<: *prepare-tasks-with-secrets
   - task: prepare-image
     <<: *prepare-image
-        OM_VAR_project: ((.:paving-terraform.stable_config_opsmanager.project))
-        OM_VAR_zone: ((.:paving-terraform.stable_config_opsmanager.region))-b
-        OM_VAR_ssl_issuer: ((.:project-account-and-bucket-terraform.ssl_issuer))
+      OM_VAR_project: ((.:paving-terraform.stable_config_opsmanager.project))
+      OM_VAR_zone: ((.:paving-terraform.stable_config_opsmanager.region))-b
+      OM_VAR_ssl_issuer: ((.:project-account-and-bucket-terraform.ssl_issuer))
   - task: om-apply-changes
     image: platform-automation-image
     file: platform-automation-tasks/tasks/apply-changes.yml
