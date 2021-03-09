@@ -32,8 +32,8 @@ meta:
     file: platform-automation-tasks/tasks/prepare-image.yml
     params:
       CA_CERTS: ((opsman_ssl))
-      OM_VAR_project: ((.:paving-terraform.project))
-      OM_VAR_zone: europe-west2-b
+      OM_VAR_project: ((gcp_project_id))
+      OM_VAR_zone: ((region))-b
       OM_VAR_ssl_issuer: ((.:project-account-and-bucket-terraform.ssl_issuer))
 
 groups:
@@ -287,7 +287,7 @@ jobs:
         <<: &paving-vars
           project: ((gcp_project_id))
           environment_name: ((env))
-          region: europe-west2
+          region: ((region))
           availability_zones: ((.:project-creds.available_zones))
           hosted_zone: ((.:project-creds.zone_name))
           ssl_certificate: ((.:project-creds.ssl_cert))
