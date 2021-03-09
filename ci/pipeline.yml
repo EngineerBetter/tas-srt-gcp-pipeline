@@ -30,8 +30,6 @@ meta:
   prepare-image: &prepare-image
     image: platform-automation-image
     file: platform-automation-tasks/tasks/prepare-image.yml
-    params:
-      CA_CERTS: ((opsman_ssl))
 
 groups:
 - name: deploy
@@ -319,6 +317,8 @@ jobs:
     <<: *prepare-tasks-with-secrets
   - task: prepare-image
     <<: *prepare-image
+    params:
+      CA_CERTS: ((opsman_ssl))
       OM_VAR_project: ((.:paving-terraform.stable_config_opsmanager.project))
       OM_VAR_zone: ((.:paving-terraform.stable_config_opsmanager.region))-b
       OM_VAR_ssl_issuer: ((.:project-account-and-bucket-terraform.ssl_issuer))
@@ -445,6 +445,8 @@ jobs:
     <<: *prepare-tasks-with-secrets
   - task: prepare-image
     <<: *prepare-image
+    params:
+      CA_CERTS: ((opsman_ssl))
       OM_VAR_project: ((.:paving-terraform.stable_config_opsmanager.project))
       OM_VAR_zone: ((.:paving-terraform.stable_config_opsmanager.region))-b
       OM_VAR_ssl_issuer: ((.:project-account-and-bucket-terraform.ssl_issuer))
@@ -526,6 +528,8 @@ jobs:
     <<: *prepare-tasks-with-secrets
   - task: prepare-image
     <<: *prepare-image
+    params:
+      CA_CERTS: ((opsman_ssl))
       OM_VAR_project: ((.:paving-terraform.stable_config_opsmanager.project))
       OM_VAR_zone: ((.:paving-terraform.stable_config_opsmanager.region))-b
       OM_VAR_ssl_issuer: ((.:project-account-and-bucket-terraform.ssl_issuer))
