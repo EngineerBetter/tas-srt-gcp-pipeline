@@ -317,6 +317,7 @@ jobs:
     format: json
   - load_var: paving-terraform
     file: paving-terraform/metadata
+    reveal: true
     format: json
   - task: prepare-tasks-with-secrets
     <<: *prepare-tasks-with-secrets
