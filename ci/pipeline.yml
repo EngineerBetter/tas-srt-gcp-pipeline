@@ -237,6 +237,7 @@ jobs:
       passed: [setup-project]
     - get: paving
     - get: project-account-and-bucket-terraform
+      trigger: true
       passed: [setup-project]
     - get: pcf-ops-image
   - in_parallel:
@@ -277,8 +278,10 @@ jobs:
       trigger: true
       passed: [pave-project]
     - get: project-account-and-bucket-terraform
+      trigger: true
       passed: [pave-project]
     - get: paving-terraform
+      trigger: true
       passed: [pave-project]
     - get: pcf-ops-image
   - task: load-tfvars-into-credhub
@@ -304,8 +307,10 @@ jobs:
       passed: [load-tfvars-into-credhub]
     - get: state
     - get: project-account-and-bucket-terraform
+      trigger: true
       passed: [load-tfvars-into-credhub]
     - get: paving-terraform
+      trigger: true
       passed: [load-tfvars-into-credhub]
   - load_var: project-account-and-bucket-terraform
     file: project-account-and-bucket-terraform/metadata
@@ -425,8 +430,10 @@ jobs:
       trigger: true
       passed: [install-opsman]
     - get: project-account-and-bucket-terraform
+      trigger: true
       passed: [install-opsman]
     - get: paving-terraform
+      trigger: true
       passed: [install-opsman]
   - load_var: project-account-and-bucket-terraform
     file: project-account-and-bucket-terraform/metadata
@@ -501,8 +508,10 @@ jobs:
       trigger: true
       passed: [configure-tas]
     - get: project-account-and-bucket-terraform
+      trigger: true
       passed: [configure-tas]
     - get: paving-terraform
+      trigger: true
       passed: [configure-tas]
   - load_var: project-account-and-bucket-terraform
     file: project-account-and-bucket-terraform/metadata
