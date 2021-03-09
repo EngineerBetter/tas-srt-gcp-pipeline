@@ -99,6 +99,8 @@ resources:
     uri: git@github.com:pivotal/paving.git
     private_key: ((git_private_key))
     branch: master
+    version:
+      ref: 1691aeae263ff5c66c901fb62cc64dd80e7d70ec
 
 - name: project-tfstate
   type: gcs
