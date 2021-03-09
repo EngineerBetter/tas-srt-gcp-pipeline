@@ -176,6 +176,12 @@ resources:
   source:
     repository: engineerbetter/pcf-ops
 
+- name: alpine-git
+  type: registry-image
+  icon: docker
+  source:
+    repository: alpine/git
+
 - name: platform-automation-pivnet
   type: pivnet
   source:
@@ -242,6 +248,7 @@ jobs:
       trigger: true
       passed: [setup-project]
     - get: pcf-ops-image
+    - get: alpine-git
   - in_parallel:
     - load_var: project-creds
       file: project-account-and-bucket-terraform/metadata
@@ -258,6 +265,21 @@ jobs:
           - -euc
           - |
             rm -f paving/gcp/pks-*
+    - task: patch-paving-repo
+      image: alpine-git
+      config:
+        platform: linux
+        inputs:
+        - name: paving
+        - name: tas-srt-gcp-pipeline-repo
+        outputs: [name: paving]
+        run:
+          path: bash
+          args:
+          - -euc
+          - |
+            cd tas-srt-gcp-pipeline-repo
+            git am --3way --keep < lib/lb_network.patch
   - put: paving-terraform
     params:
       terraform_source: paving/gcp

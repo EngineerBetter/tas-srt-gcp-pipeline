@@ -1,0 +1,65 @@
+From 6787c42ced961c5c063a2c8346b0e6022cdaf5d5 Mon Sep 17 00:00:00 2001
+From: CI bot <ci@engineerbetter.com>
+Date: Tue, 9 Mar 2021 14:28:05 +0000
+Subject: Add named port to instance group
+
+---
+ gcp/pas-lbs.tf | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/gcp/pas-lbs.tf b/gcp/pas-lbs.tf
+index dfd39b0..5347483 100644
+--- a/gcp/pas-lbs.tf
++++ b/gcp/pas-lbs.tf
+@@ -22,6 +22,11 @@ resource "google_compute_instance_group" "http-lb" {
+   zone = element(var.availability_zones, count.index)
+
+   count = length(var.availability_zones)
++
++  named_port {
++    name = "http"
++    port = "8080"
++  }
+ }
+
+ resource "google_compute_global_address" "http-lb" {
+--
+2.24.3 (Apple Git-128)
+
+
+From b5d5b9ce52a6bc1a627ea4dfeacee28473a18fbe Mon Sep 17 00:00:00 2001
+From: CI bot <ci@engineerbetter.com>
+Date: Tue, 9 Mar 2021 15:06:59 +0000
+Subject: Add missing firewall rule to allow LB healthchecks on router port
+ 8080
+
+---
+ gcp/pas-firewalls.tf | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/gcp/pas-firewalls.tf b/gcp/pas-firewalls.tf
+index 7f6fcba..0be2c58 100644
+--- a/gcp/pas-firewalls.tf
++++ b/gcp/pas-firewalls.tf
+@@ -71,3 +71,19 @@ resource "google_compute_firewall" "http-lb" {
+
+   target_tags = ["${var.environment_name}-http-lb"]
+ }
++
++resource "google_compute_firewall" "http-lb-health-check" {
++  name    = "${var.environment_name}-http-lb-health-check"
++  network = google_compute_network.network.name
++
++  direction = "INGRESS"
++
++  allow {
++    protocol = "tcp"
++    ports    = ["8080"]
++  }
++
++  source_ranges = ["130.211.0.0/22", "35.191.0.0/16"]
++
++  target_tags = [google_compute_http_health_check.http-lb.name]
++}
+--
+2.24.3 (Apple Git-128)
