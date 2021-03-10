@@ -10,7 +10,7 @@ resource "google_dns_managed_zone" "tas-srt" {
 }
 
 data "aws_route53_zone" "parent_zone" {
-  name = "engineerbetter.com."
+  name = "${var.parent_domain}."
 }
 
 resource "aws_route53_record" "ns" {

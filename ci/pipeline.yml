@@ -31,7 +31,7 @@ meta:
     image: platform-automation-image
     file: platform-automation-tasks/tasks/prepare-image.yml
     params:
-      CA_CERTS: ((opsman_ssl))
+      CA_CERTS: ((tls_cert))
 
 groups:
 - name: deploy
@@ -151,7 +151,8 @@ resources:
     vars:
       project_id: ((gcp_project_id))
       env: ((env))
-      zone_address: ((project_name)).engineerbetter.com
+      zone_address: ((project_name)).((parent_domain))
+      parent_domain: ((parent_domain))
 
 - name: paving-terraform
   type: terraform
@@ -490,6 +491,20 @@ jobs:
           env: tas-srt-gcp-pipeline-repo
         params:
           ENV_FILE: config/env.yml
+      - task: configure-tas
+        image: platform-automation-image
+        file: platform-automation-tasks/tasks/configure-product.yml
+        input_mapping:
+          product: tas-product
+          env: tas-srt-gcp-pipeline-repo
+          config: tas-srt-gcp-pipeline-repo
+        params:
+          OM_VARS_ENV: OM_VAR
+          ENV_FILE: config/env.yml
+          CONFIG_FILE: config/cf.yml
+          OM_env: ((env))
+          OM_project_name: ((project_name))
+          OM_parent_domain: ((parent_domain))
 
 - name: apply-changes
   serial: true

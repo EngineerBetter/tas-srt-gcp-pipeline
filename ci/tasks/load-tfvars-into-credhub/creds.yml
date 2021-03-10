@@ -8,14 +8,26 @@ credentials:
     type: value
     value: ((opsman_password))
 
-  - name: /concourse/((concourse_team))/((concourse_pipeline))/opsman_ssl
-    type: value
-    value: ((ssl_cert))
-
   - name: /concourse/((concourse_team))/((concourse_pipeline))/gcp_service_account_email
     type: value
     value: ((gcp_service_account_email))
 
-  - name: /concourse/((concourse_team))/((concourse_pipeline))/ssl_issuer
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/tls_issuer
     type: value
-    value: ((ssl_issuer))
+    value: ((tls_issuer))
+
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/tls_cert
+    type: value
+    value: ((tls_cert))
+
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/tls_key
+    type: value
+    value: ((tls_key))
+
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/credhub_encryption_key
+    type: value
+    value: ((credhub_encryption_key))
+
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/hsm_password
+    type: value
+    value: ((hsm_password))

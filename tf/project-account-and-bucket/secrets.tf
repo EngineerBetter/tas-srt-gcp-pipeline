@@ -3,8 +3,12 @@ resource "random_string" "credhub_encryption_key" {
   special = false
 }
 
-
 resource "random_string" "opsman_password" {
+  length  = 16
+  special = false
+}
+
+resource "random_string" "hsm_password" {
   length  = 16
   special = false
 }

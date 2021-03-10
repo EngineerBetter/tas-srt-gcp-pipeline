@@ -19,18 +19,19 @@ output "available_zones" {
   value = data.google_compute_zones.available.names
 }
 
-output "ssl_key" {
+output "tls_key" {
   value     = acme_certificate.apps.private_key_pem
   sensitive = true
 }
 
-output "ssl_cert" {
+output "tls_cert" {
   value = acme_certificate.apps.certificate_pem
 }
 
-output "ssl_issuer" {
+output "tls_issuer" {
   value = acme_certificate.apps.issuer_pem
 }
+
 output "gcp_service_account_email" {
   value = google_service_account.ci_bot.email
 }
@@ -42,5 +43,10 @@ output "credhub_encryption_key" {
 
 output "opsman_password" {
   value     = random_string.opsman_password.result
+  sensitive = true
+}
+
+output "hsm_password" {
+  value     = random_string.hsm_password.result
   sensitive = true
 }

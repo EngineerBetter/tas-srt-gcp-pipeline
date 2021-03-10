@@ -8,3 +8,4 @@ region: europe-west2
 zone: europe-west2-b
 folder_name: spikes
 bucket_location: EU
+parent_domain: engineerbetter.com
