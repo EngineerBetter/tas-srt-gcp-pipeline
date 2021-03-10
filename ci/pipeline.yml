@@ -541,6 +541,7 @@ jobs:
       env: tas-srt-gcp-pipeline-repo
     params:
       ENV_FILE: config/env.yml
+      OM_CONNECT_TIMEOUT: 60
 
 - name: teardown-project
   serial: true
