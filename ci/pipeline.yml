@@ -370,7 +370,7 @@ jobs:
       OM_VAR_management_subnet_name: ((.:paving-terraform.stable_config_opsmanager.management_subnet_name))
       OM_VAR_ops_manager_public_ip: ((.:paving-terraform.stable_config_opsmanager.ops_manager_public_ip))
       OM_VAR_ops_manager_ssh_public_key: ((.:paving-terraform.stable_config_opsmanager.ops_manager_ssh_public_key))
-      OM_VAR_ops_manager_tags: ((.:paving-terraform.stable_config_opsmanager.ops_manager_tags))
+      OM_VAR_ops_manager_tags: null
   - task: configure-opsman
     image: platform-automation-image
     file: platform-automation-tasks/tasks/configure-opsman.yml
