@@ -265,8 +265,8 @@ jobs:
           region: ((region))
           availability_zones: ((.:project-creds.available_zones))
           hosted_zone: ((.:project-creds.zone_name))
-          ssl_certificate: ((.:project-creds.ssl_cert))
-          ssl_private_key: ((.:project-creds.ssl_key))
+          ssl_certificate: ((.:project-creds.tls_cert))
+          ssl_private_key: ((.:project-creds.tls_key))
           service_account_key: ((.:project-creds.gcp_credentials_json))
 
 - name: load-tfvars-into-credhub
