@@ -359,17 +359,15 @@ jobs:
     input_mapping:
       env: tas-srt-gcp-pipeline-repo
       config: tas-srt-gcp-pipeline-repo
+      vars: tas-srt-gcp-pipeline-repo
     params:
       ENV_FILE: config/env.yml
+      VARS_FILE: vars/((env)).yml
       AUTH_CONFIG_FILE: config/auth.yml
       OM_VARS_ENV: OM_VAR
-      OM_VAR_opsman_password: ((.:project-account-and-bucket-terraform.opsman_password))
-      OM_VAR_project: ((.:paving-terraform.project))
-      OM_VAR_region: ((.:paving-terraform.stable_config_opsmanager.region))
-      OM_VAR_zone: ((.:paving-terraform.stable_config_opsmanager.region))-b
-      OM_VAR_management_subnet_name: ((.:paving-terraform.stable_config_opsmanager.management_subnet_name))
-      OM_VAR_ops_manager_public_ip: ((.:paving-terraform.stable_config_opsmanager.ops_manager_public_ip))
-      OM_VAR_ops_manager_ssh_public_key: ((.:paving-terraform.stable_config_opsmanager.ops_manager_ssh_public_key))
+      OM_VAR_management_subnet_name: null
+      OM_VAR_ops_manager_public_ip: null
+      OM_VAR_ops_manager_ssh_public_key: null
       OM_VAR_ops_manager_tags: null
   - task: configure-opsman
     image: platform-automation-image
@@ -502,9 +500,9 @@ jobs:
           OM_VARS_ENV: OM_VAR
           ENV_FILE: config/env.yml
           CONFIG_FILE: config/cf.yml
-          OM_env: ((env))
-          OM_project_name: ((project_name))
-          OM_parent_domain: ((parent_domain))
+          OM_VAR_env: ((env))
+          OM_VAR_project_name: ((project_name))
+          OM_VAR_parent_domain: ((parent_domain))
 
 - name: apply-changes
   serial: true
