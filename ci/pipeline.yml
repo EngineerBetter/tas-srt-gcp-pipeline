@@ -272,14 +272,15 @@ jobs:
         inputs:
         - name: paving
         - name: tas-srt-gcp-pipeline-repo
-        outputs: [name: paving]
+        outputs:
+        - name: paving
         run:
-          path: bash
           args:
-          - -euc
-          - |
-            cd tas-srt-gcp-pipeline-repo
-            git am --3way --keep < lib/lb_network.patch
+          - --git-dir=paving/.git
+          - am
+          - --3way
+          - --keep
+          - tas-srt-gcp-pipeline-repo/lib/lb_network.patch
   - put: paving-terraform
     params:
       terraform_source: paving/gcp
