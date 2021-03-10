@@ -15,3 +15,7 @@ credentials:
   - name: /concourse/((concourse_team))/((concourse_pipeline))/gcp_service_account_email
     type: value
     value: ((gcp_service_account_email))
+
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/ssl_issuer
+    type: value
+    value: ((ssl_issuer))

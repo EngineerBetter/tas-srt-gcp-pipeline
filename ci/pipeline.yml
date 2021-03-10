@@ -32,9 +32,6 @@ meta:
     file: platform-automation-tasks/tasks/prepare-image.yml
     params:
       CA_CERTS: ((opsman_ssl))
-      OM_VAR_project: ((gcp_project_id))
-      OM_VAR_zone: ((region))-b
-      OM_VAR_ssl_issuer: ((.:project-account-and-bucket-terraform.ssl_issuer))
 
 groups:
 - name: deploy
@@ -396,7 +393,6 @@ jobs:
       VARS_FILES: |
         vars/vars/((env)).yml
       OM_VARS_ENV: OM_VAR
-      OM_VAR_ssl_issuer: ((.:project-account-and-bucket-terraform.ssl_issuer))
   - task: apply-director-changes-custom
     image: platform-automation-image
     file: platform-automation-tasks/tasks/apply-director-changes.yml
