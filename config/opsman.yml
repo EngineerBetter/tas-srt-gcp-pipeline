@@ -2,7 +2,7 @@
 opsman-configuration:
   gcp:
     gcp_service_account_name: dev-ops-manager@srt-test-1.iam.gserviceaccount.com
-    project: ((project))
+    project: ((gcp_project_id))
     region: ((region))
     zone: ((zone))
     vpc_subnet: ((management_subnet_name))
