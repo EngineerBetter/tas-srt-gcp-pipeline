@@ -233,6 +233,7 @@ jobs:
       trigger: true
       passed: [setup-project]
     - get: paving
+      trigger: true
     - get: project-account-and-bucket-terraform
       trigger: true
       passed: [setup-project]
