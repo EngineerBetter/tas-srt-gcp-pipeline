@@ -96,11 +96,9 @@ resources:
   type: git
   icon: github
   source:
-    uri: git@github.com:pivotal/paving.git
+    uri: git@github.com:EngineerBetter/paving.git
     private_key: ((git_private_key))
     branch: master
-    version:
-      ref: 1691aeae263ff5c66c901fb62cc64dd80e7d70ec
 
 - name: project-tfstate
   type: gcs
@@ -176,12 +174,6 @@ resources:
   source:
     repository: engineerbetter/pcf-ops
 
-- name: alpine-git
-  type: registry-image
-  icon: docker
-  source:
-    repository: alpine/git
-
 - name: platform-automation-pivnet
   type: pivnet
   source:
@@ -248,7 +240,6 @@ jobs:
       trigger: true
       passed: [setup-project]
     - get: pcf-ops-image
-    - get: alpine-git
   - in_parallel:
     - load_var: project-creds
       file: project-account-and-bucket-terraform/metadata
@@ -265,22 +256,6 @@ jobs:
           - -euc
           - |
             rm -f paving/gcp/pks-*
-    - task: patch-paving-repo
-      image: alpine-git
-      config:
-        platform: linux
-        inputs:
-        - name: paving
-        - name: tas-srt-gcp-pipeline-repo
-        outputs:
-        - name: paving
-        run:
-          args:
-          - --git-dir=paving/.git
-          - am
-          - --3way
-          - --keep
-          - tas-srt-gcp-pipeline-repo/lib/lb_network.patch
   - put: paving-terraform
     params:
       terraform_source: paving/gcp
