@@ -380,6 +380,15 @@ jobs:
       ENV_FILE: config/env.yml
       OPSMAN_CONFIG_FILE: config/opsman.yml
       VARS_FILES: vars/vars/((env)).yml
+  - task: change-opsman-vm-scopes
+    image: platform-automation-image
+    file: tas-srt-gcp-pipeline-repo/ci/tasks/change-opsman-vm-scopes/task.yml
+    params:
+      OM_USERNAME: admin
+      OM_PASSSWORD: ((opsman_password))
+      OM_TARGET: https://((ops_manager_dns))
+      OM_DECRYPTION_PASSPHRASE: ((opsman_decryption_passphrase))
+      OM_SKIP_SSL_VALIDATION: true
   - task: configure-director
     image: platform-automation-image
     file: platform-automation-tasks/tasks/configure-director.yml

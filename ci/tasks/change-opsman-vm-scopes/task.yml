@@ -1,0 +1,15 @@
+---
+platform: linux
+
+inputs:
+- name: tas-srt-gcp-pipeline-repo
+
+params:
+  OM_USERNAME:
+  OM_PASSSWORD:
+  OM_TARGET:
+  OM_DECRYPTION_PASSPHRASE:
+  OM_SKIP_SSL_VALIDATION:
+
+run:
+  path: tas-srt-gcp-pipeline-repo/ci/tasks/change-opsman-vm-scopes/task.sh
