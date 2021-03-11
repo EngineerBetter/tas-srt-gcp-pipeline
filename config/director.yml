@@ -7,7 +7,6 @@ az-configuration:
     iaas_configuration_name: default
 iaas-configurations:
   - additional_cloud_properties: {}
-    associated_service_account: dev-ops-manager@srt-test-1.iam.gserviceaccount.com
     default_deployment_tag: pcf-vms
     name: default
     project: srt-test-1
@@ -41,6 +40,8 @@ networks-configuration:
             - europe-west2-b
             - europe-west2-c
 properties-configuration:
+  iaas_configuration:
+    associated_service_account: dev-ops-manager@srt-test-1.iam.gserviceaccount.com
   director_configuration:
     blobstore_type: local
     bosh_recreate_on_next_deploy: false
