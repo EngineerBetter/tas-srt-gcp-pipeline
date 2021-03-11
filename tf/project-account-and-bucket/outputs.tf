@@ -46,6 +46,10 @@ output "opsman_password" {
   sensitive = true
 }
 
+output "opsman_decryption_passphrase" {
+  value = random_string.opsman_decryption_passphrase.result
+}
+
 output "hsm_password" {
   value     = random_string.hsm_password.result
   sensitive = true
