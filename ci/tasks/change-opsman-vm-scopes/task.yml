@@ -3,6 +3,7 @@ platform: linux
 
 inputs:
 - name: tas-srt-gcp-pipeline-repo
+- name: vars
 
 params:
   OM_USERNAME:
