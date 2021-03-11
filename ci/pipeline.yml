@@ -586,10 +586,11 @@ jobs:
           - |
             rm -f paving/gcp/pks-*
   - put: paving-terraform
+    get_params:
+      action: destroy
     params:
       terraform_source: paving/gcp
       action: destroy
-      get_params: {action: destroy}
       vars:
         <<: *paving-vars
 
