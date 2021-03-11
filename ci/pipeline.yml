@@ -380,15 +380,6 @@ jobs:
       ENV_FILE: config/env.yml
       OPSMAN_CONFIG_FILE: config/opsman.yml
       VARS_FILES: vars/vars/((env)).yml
-  - task: change-opsman-vm-scopes
-    image: platform-automation-image
-    file: tas-srt-gcp-pipeline-repo/ci/tasks/change-opsman-vm-scopes/task.yml
-    input_mapping:
-      env: tas-srt-gcp-pipeline-repo
-      vars: tas-srt-gcp-pipeline-repo
-    params:
-      ENV_FILE: config/env.yml
-      VARS_FILES: vars/vars/((env)).yml
   - task: configure-director
     image: platform-automation-image
     file: platform-automation-tasks/tasks/configure-director.yml

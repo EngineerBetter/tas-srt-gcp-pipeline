@@ -10,3 +10,5 @@ opsman-configuration:
     ssh_public_key: |
       ((ops_manager_ssh_public_key))
     tags: ((ops_manager_tags))
+    scopes:
+    - https://www.googleapis.com/auth/cloud-platform
