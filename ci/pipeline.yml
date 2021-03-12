@@ -212,6 +212,7 @@ jobs:
       params:
         file: tfstate-out/terraform.tfstate
   - put: project-account-and-bucket-terraform
+    attempts: 3
     params:
       terraform_source: tas-srt-gcp-pipeline-repo/tf/project-account-and-bucket
   - load_var: project-creds
