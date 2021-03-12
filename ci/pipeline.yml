@@ -107,13 +107,6 @@ resources:
       json_key: ((inception_gcp_credentials_json))
     versioned_file: ci/terraform.tfstate
 
-- name: platform-automation-pivnet
-  type: pivnet
-  source:
-    api_token: ((pivnet_token))
-    product_slug: platform-automation
-    sort_by: semver
-
 # VM state and foundation tas-srt-gcp-pipeline-repo
 - name: state
   type: gcs
@@ -669,17 +662,3 @@ jobs:
       - put: state
         params:
           file: generated-state/state.yml
-
-- name: fetch-platform-automation
-  # We use the pivnet resource to bootstrap the pipeline,
-  # and because this product is part of the pipeline, not the foundation
-  plan:
-  - get: platform-automation-pivnet
-    trigger: true
-  - in_parallel:
-    - put: platform-automation-tasks
-      params:
-        file: platform-automation-pivnet/*tasks*.zip
-    - put: platform-automation-image
-      params:
-        file: platform-automation-pivnet/*image*.tgz
