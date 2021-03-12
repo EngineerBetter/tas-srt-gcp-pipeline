@@ -293,10 +293,12 @@ jobs:
   plan:
   - in_parallel:
     - get: platform-automation-image
+      resource: platform-automation
       params:
         unpack: true
         globs: [platform-automation-image-(.*).tgz]
     - get: platform-automation-tasks
+      resource: platform-automation
       params:
         unpack: true
         globs: [platform-automation-tasks-(.*).zip]
@@ -419,10 +421,12 @@ jobs:
   plan:
   - in_parallel:
     - get: platform-automation-image
+      resource: platform-automation
       params:
         unpack: true
         globs: [platform-automation-image-(.*).tgz]
     - get: platform-automation-tasks
+      resource: platform-automation
       params:
         unpack: true
         globs: [platform-automation-tasks-(.*).zip]
@@ -517,10 +521,12 @@ jobs:
   plan:
   - in_parallel:
     - get: platform-automation-image
+      resource: platform-automation
       params:
         unpack: true
         globs: [platform-automation-image-(.*).tgz]
     - get: platform-automation-tasks
+      resource: platform-automation
       params:
         unpack: true
         globs: [platform-automation-tasks-(.*).zip]
@@ -612,10 +618,12 @@ jobs:
   plan:
   - in_parallel:
     - get: platform-automation-image
+      resource: platform-automation
       params:
         unpack: true
         globs: [platform-automation-image-(.*).tgz]
     - get: platform-automation-tasks
+      resource: platform-automation
       params:
         unpack: true
         globs: [platform-automation-tasks-(.*).zip]
