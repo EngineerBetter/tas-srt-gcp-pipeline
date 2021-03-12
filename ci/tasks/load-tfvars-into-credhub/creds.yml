@@ -44,6 +44,10 @@ credentials:
     type: value
     value: ((ops_manager_ssh_public_key))
 
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/ops_manager_ssh_private_key
+    type: value
+    value: ((ops_manager_ssh_private_key))
+
   - name: /concourse/((concourse_team))/((concourse_pipeline))/management_subnet_name
     type: value
     value: ((management_subnet_name))
