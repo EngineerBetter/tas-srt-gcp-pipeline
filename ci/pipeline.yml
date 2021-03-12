@@ -612,7 +612,7 @@ jobs:
   plan:
   - in_parallel:
     - get: tas-srt-gcp-pipeline-repo
-    - get: paving
+    - get: paving-terraform
     - get: project-account-and-bucket-terraform
     - get: state
   - load_var: project-account-and-bucket-terraform
