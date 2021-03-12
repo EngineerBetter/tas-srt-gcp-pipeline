@@ -1,0 +1,10 @@
+platform: linux
+
+inputs:
+- name: tas-srt-gcp-pipeline-repo
+
+params:
+  CLOUDSDK_CORE_DISABLE_PROMPTS: 1
+
+run:
+  path: tas-srt-gcp-pipeline-repo/ci/tasks/delete-all-disk/task.sh

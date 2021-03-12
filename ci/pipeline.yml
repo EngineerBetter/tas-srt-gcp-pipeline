@@ -552,13 +552,25 @@ jobs:
   serial: true
   plan:
   - in_parallel:
+    - get: platform-automation-image
+      resource: platform-automation-pivnet
+      params:
+        unpack: true
+        globs: [platform-automation-image-*.tgz]
     - get: tas-srt-gcp-pipeline-repo
       passed: [unpave-project]
     - get: concourse-gcp-tf-bootstrap
     - get: project-tfstate
+  - task: write-gcp-creds-to-file
+    file: tas-srt-gcp-pipeline-repo/ci/tasks/write-gcp-creds-to-file/task.yml
+    params:
+      GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
+  - task: delete-all-disks
+    image: platform-automation-image
+    file: tas-srt-gcp-pipeline-repo/ci/tasks/delete-all-disks/task.yml
   - put: project-account-and-bucket-terraform
     get_params:
-        action: destroy
+      action: destroy
     params:
       action: destroy
       terraform_source: tas-srt-gcp-pipeline-repo/tf/project-account-and-bucket
