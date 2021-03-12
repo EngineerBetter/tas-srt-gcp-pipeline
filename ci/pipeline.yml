@@ -553,6 +553,12 @@ jobs:
       - set-pipeline
     - get: concourse-gcp-tf-bootstrap
     - get: project-tfstate
+  - put: project-account-and-bucket-terraform
+    get_params:
+        action: destroy
+    params:
+      action: destroy
+      terraform_source: tas-srt-gcp-pipeline-repo/tf/project-account-and-bucket
   - task: teardown
     file: concourse-gcp-tf-bootstrap/tasks/teardown.yml
     input_mapping:
@@ -594,6 +600,49 @@ jobs:
       action: destroy
       vars:
         <<: *paving-vars
+
+- name: delete-installation-and-opsman
+  serial: true
+  plan:
+  - in_parallel:
+    - get: tas-srt-gcp-pipeline-repo
+    - get: paving
+    - get: project-account-and-bucket-terraform
+    - get: state
+  - load_var: project-account-and-bucket-terraform
+    file: project-account-and-bucket-terraform/metadata
+    format: json
+  - load_var: paving-terraform
+    file: paving-terraform/metadata
+    format: json
+  - task: prepare-tasks-with-secrets
+    <<: *prepare-tasks-with-secrets
+  - task: prepare-image
+    <<: *prepare-image
+  - task: delete-installation
+    image: platform-automation-image
+    file: platform-automation-tasks/tasks/delete-installation.yml
+    input_mapping:
+      env: tas-srt-gcp-pipeline-repo
+    params:
+      ENV_FILE: config/env.yml
+      OM_CONNECT_TIMEOUT: 60
+  - task: delete-vm
+    image: platform-automation-image
+    file: tas-srt-gcp-pipeline-repo/ci/tasks/delete-vm/task.yml
+    input_mapping:
+      image: opsman-image
+      config: tas-srt-gcp-pipeline-repo
+      vars: tas-srt-gcp-pipeline-repo
+    params:
+      OPSMAN_CONFIG_FILE: config/opsman.yml
+      STATE_FILE: state.yml
+      VARS_FILES: vars/vars/((env)).yml
+    ensure: &put-state
+      do:
+      - put: state
+        params:
+          file: generated-state/state.yml
 
 - name: fetch-platform-automation
   # We use the pivnet resource to bootstrap the pipeline,
