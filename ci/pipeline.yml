@@ -500,7 +500,7 @@ jobs:
         params:
           OM_VARS_ENV: OM_VAR
           ENV_FILE: config/env.yml
-          CONFIG_FILE: config/cf.yml
+          CONFIG_FILE: config/((tas_config_file))
           OM_VAR_env: ((env))
           OM_VAR_project_name: ((project_name))
           OM_VAR_parent_domain: ((parent_domain))

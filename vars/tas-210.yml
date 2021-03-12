@@ -12,3 +12,5 @@ parent_domain: engineerbetter.com
 tas_version: 2.10.11
 opsman_version: 2.10.8
 tas_stemcell: "621.109"
+
+tas_config_file: tas-210.yml
