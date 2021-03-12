@@ -568,6 +568,8 @@ jobs:
   - task: delete-all-disks
     image: platform-automation-image
     file: tas-srt-gcp-pipeline-repo/ci/tasks/delete-all-disks/task.yml
+    params:
+      PROJECT_NAME: ((project_name))
   - put: project-account-and-bucket-terraform
     get_params:
       action: destroy
