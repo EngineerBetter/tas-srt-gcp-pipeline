@@ -1,6 +1,6 @@
 # **Tanzu Application Service (for VMs!) Small Footprint pipeline**
 
-This is a [Concourse CI](https://concourse-ci.org/) pipeline that deploys the [small footprint version](https://docs.pivotal.io/application-service/2-10/operating/small-footprint.html) of VMware Tanzu Application Service for VMs on six virtual machines on Google Cloud.
+This is a [Concourse CI](https://concourse-ci.org/) pipeline that deploys the [small footprint version](https://docs.pivotal.io/application-service/2-10/operating/small-footprint.html) of VMware Tanzu Application Service for VMs on six virtual machines on Google Cloud. TAS is VMware's paid-for distribution of Cloud Foundry, and normally deploys on 40+ VMs.
 
 Because we wrote this pipeline for ourselves, the pipeline assumes you have a parent DNS zone defined in AWS route53 (something.com) in which we can create an NS record to delegate to a child zone that the pipeline is going to create in Google Cloud DNS (somethingelse.something.com). In the likely event that this is not the case for you, you will need to fork the repo and [adapt the terraform](./tf/project-account-and-bucket/dns.tf) to work with your current DNS provider.
 
