@@ -40,14 +40,14 @@ credentials:
     type: value
     value: ((hsm_password))
 
-- name: /concourse/((concourse_team))/((concourse_pipeline))/ops_manager_ssh_public_key
-  type: value
-  value: ((ops_manager_ssh_public_key))
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/ops_manager_ssh_public_key
+    type: value
+    value: ((ops_manager_ssh_public_key))
 
-- name: /concourse/((concourse_team))/((concourse_pipeline))/management_subnet_name
-  type: value
-  value: ((management_subnet_name))
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/management_subnet_name
+    type: value
+    value: ((management_subnet_name))
 
-- name: /concourse/((concourse_team))/((concourse_pipeline))/ops_manager_tags
-  type: value
-  value: ((ops_manager_tags))
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/ops_manager_tags
+    type: value
+    value: ((ops_manager_tags))
