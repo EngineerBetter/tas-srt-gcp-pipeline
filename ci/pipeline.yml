@@ -51,6 +51,7 @@ groups:
   - set-pipeline
   - teardown-project
   - unpave-project
+  - delete-installation-and-opsman
 
 resource_types:
 - name: terraform
