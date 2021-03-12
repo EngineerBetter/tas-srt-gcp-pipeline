@@ -43,9 +43,6 @@ groups:
   - apply-changes
   - install-*
   - configure-*
-- name: fetch-dependencies
-  jobs:
-  - fetch-*
 - name: teardown
   jobs:
   - set-pipeline
