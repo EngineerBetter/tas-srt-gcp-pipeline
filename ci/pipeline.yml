@@ -555,8 +555,7 @@ jobs:
   plan:
   - in_parallel:
     - get: tas-srt-gcp-pipeline-repo
-      passed:
-      - set-pipeline
+      passed: [unpave-project]
     - get: concourse-gcp-tf-bootstrap
     - get: project-tfstate
   - put: project-account-and-bucket-terraform
@@ -577,8 +576,7 @@ jobs:
   plan:
   - in_parallel:
     - get: tas-srt-gcp-pipeline-repo
-      passed:
-      - set-pipeline
+      passed: [delete-installation-and-opsman]
     - get: paving
     - get: project-account-and-bucket-terraform
     - get: pcf-ops-image
@@ -618,6 +616,7 @@ jobs:
       params:
         unpack: true
     - get: tas-srt-gcp-pipeline-repo
+      passed: [set-pipeline]
     - get: paving-terraform
     - get: project-account-and-bucket-terraform
     - get: state
