@@ -2,8 +2,8 @@ env: "tas-210"
 
 concourse_team: main
 concourse_pipeline: tas-210
-gcp_project_id: tas-srt-210
-project_name: tas-srt-210
+gcp_project_id: tas-210-srt
+project_name: tas-210-srt
 region: europe-west2
 zone: europe-west2-b
 folder_name: spikes
