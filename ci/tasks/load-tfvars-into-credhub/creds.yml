@@ -51,3 +51,27 @@ credentials:
   - name: /concourse/((concourse_team))/((concourse_pipeline))/ops_manager_tags
     type: value
     value: ((ops_manager_tags))
+
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/management_subnet_reserved_ip_ranges
+    type: value
+    value: ((management_subnet_reserved_ip_ranges))
+
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/services_subnet_reserved_ip_ranges
+    type: value
+    value: ((services_subnet_reserved_ip_ranges))
+
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/management_subnet_cidr
+    type: value
+    value: ((management_subnet_cidr))
+
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/management_subnet_gateway
+    type: value
+    value: ((management_subnet_gateway))
+
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/services_subnet_cidr
+    type: value
+    value: ((services_subnet_cidr))
+
+  - name: /concourse/((concourse_team))/((concourse_pipeline))/services_subnet_gateway
+    type: value
+    value: ((services_subnet_gateway))
