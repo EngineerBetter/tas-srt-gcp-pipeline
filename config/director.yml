@@ -7,10 +7,10 @@ az-configuration:
     iaas_configuration_name: default
 iaas-configurations:
   - additional_cloud_properties: {}
-    associated_service_account: dev-ops-manager@srt-test-1.iam.gserviceaccount.com
+    associated_service_account: ((env))-ops-manager@((gcp_project_id)).iam.gserviceaccount.com
     default_deployment_tag: pcf-vms
     name: default
-    project: srt-test-1
+    project: ((gcp_project_id))
 network-assignment:
   network:
     name: dev-network
