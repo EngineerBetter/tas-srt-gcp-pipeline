@@ -6,7 +6,7 @@ service_account="$(awk '/client_email/{print $2}' "tas-srt-gcp-pipeline-repo/var
 gcloud auth activate-service-account "${service_account}" --key-file "tas-srt-gcp-pipeline-repo/vars/gcp_creds.json"
 gcloud config set project "$PROJECT_NAME"
 
-apt get update && apt-get install -y jq
+apt-get update && apt-get install -y jq
 
 disks=$(gcloud compute disks list --format='json' | jq --raw-output --compact-output '.[]')
 
