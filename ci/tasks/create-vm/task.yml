@@ -51,7 +51,6 @@ params:
   OM_VAR_opsman_decryption_passphrase: ((opsman_decryption_passphrase))
   OM_VAR_opsman_password: ((opsman_password))
   OM_VAR_pivnet_token: ((pivnet_token))
-  OM_VAR_region: ((region))
   OM_VARS_ENV: OM_VAR
 
 run:
