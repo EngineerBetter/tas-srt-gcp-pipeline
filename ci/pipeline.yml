@@ -638,6 +638,10 @@ jobs:
     params:
       ENV_FILE: config/env.yml
       OM_CONNECT_TIMEOUT: 60
+  - task: write-gcp-creds-to-file
+    file: tas-srt-gcp-pipeline-repo/ci/tasks/write-gcp-creds-to-file/task.yml
+    params:
+      GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
   - task: delete-vm
     image: platform-automation-image
     file: tas-srt-gcp-pipeline-repo/ci/tasks/delete-vm/task.yml
