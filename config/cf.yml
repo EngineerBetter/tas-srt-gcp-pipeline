@@ -356,7 +356,7 @@ product-properties:
     value: {}
 network-properties:
   network:
-    name: dev-network
+    name: ((env))-network
   other_availability_zones:
   - name: europe-west2-c
   - name: europe-west2-b
@@ -475,7 +475,7 @@ resource-config:
     additional_networks: []
     additional_vm_extensions: []
     elb_names:
-    - http:dev-http-lb
+    - http:((env))-http-lb
     instance_type:
       id: automatic
     instances: automatic
