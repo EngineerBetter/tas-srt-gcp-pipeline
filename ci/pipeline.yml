@@ -286,12 +286,12 @@ jobs:
       resource: platform-automation-pivnet
       params:
         unpack: true
-        globs: [platform-automation-image-(.*).tgz]
+        globs: [platform-automation-image-*.tgz]
     - get: platform-automation-tasks
       resource: platform-automation-pivnet
       params:
         unpack: true
-        globs: [platform-automation-tasks-(.*).zip]
+        globs: [platform-automation-tasks-*.zip]
     - get: tas-srt-gcp-pipeline-repo
       trigger: true
       passed: [load-tfvars-into-credhub]
@@ -414,12 +414,12 @@ jobs:
       resource: platform-automation-pivnet
       params:
         unpack: true
-        globs: [platform-automation-image-(.*).tgz]
+        globs: [platform-automation-image-*.tgz]
     - get: platform-automation-tasks
       resource: platform-automation-pivnet
       params:
         unpack: true
-        globs: [platform-automation-tasks-(.*).zip]
+        globs: [platform-automation-tasks-*.zip]
     - get: tas-srt-gcp-pipeline-repo
       trigger: true
       passed: [install-opsman]
@@ -514,12 +514,12 @@ jobs:
       resource: platform-automation-pivnet
       params:
         unpack: true
-        globs: [platform-automation-image-(.*).tgz]
+        globs: [platform-automation-image-*.tgz]
     - get: platform-automation-tasks
       resource: platform-automation-pivnet
       params:
         unpack: true
-        globs: [platform-automation-tasks-(.*).zip]
+        globs: [platform-automation-tasks-*.zip]
     - get: tas-srt-gcp-pipeline-repo
       trigger: true
       passed: [configure-tas]
@@ -611,12 +611,12 @@ jobs:
       resource: platform-automation-pivnet
       params:
         unpack: true
-        globs: [platform-automation-image-(.*).tgz]
+        globs: [platform-automation-image-*.tgz]
     - get: platform-automation-tasks
       resource: platform-automation-pivnet
       params:
         unpack: true
-        globs: [platform-automation-tasks-(.*).zip]
+        globs: [platform-automation-tasks-*.zip]
     - get: tas-srt-gcp-pipeline-repo
       passed: [set-pipeline]
     - get: paving-terraform
