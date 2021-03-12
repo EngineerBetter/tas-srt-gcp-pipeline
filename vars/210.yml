@@ -1,0 +1,14 @@
+env: "210"
+
+concourse_team: main
+concourse_pipeline: tas-210
+gcp_project_id: tas-srt-210
+project_name: tas-srt-210
+region: europe-west2
+zone: europe-west2-b
+folder_name: spikes
+bucket_location: EU
+parent_domain: engineerbetter.com
+tas_version: 2.10.11
+opsman_version: 2.10.8
+tas_stemcell: "621.109"
