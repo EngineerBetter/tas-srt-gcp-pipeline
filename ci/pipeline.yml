@@ -611,6 +611,12 @@ jobs:
   serial: true
   plan:
   - in_parallel:
+    - get: platform-automation-image
+      params:
+        unpack: true
+    - get: platform-automation-tasks
+      params:
+        unpack: true
     - get: tas-srt-gcp-pipeline-repo
     - get: paving-terraform
     - get: project-account-and-bucket-terraform
