@@ -13,16 +13,16 @@ iaas-configurations:
     project: ((gcp_project_id))
 network-assignment:
   network:
-    name: dev-network
+    name: ((env))-network
   other_availability_zones: []
   singleton_availability_zone:
     name: europe-west2-a
 networks-configuration:
   icmp_checks_enabled: false
   networks:
-    - name: dev-network
+    - name: ((env))-network
       subnets:
-        - iaas_identifier: dev-network/dev-management-subnet/europe-west2
+        - iaas_identifier: ((env))-network/((env))-management-subnet/europe-west2
           cidr: 10.0.0.0/26
           dns: 8.8.8.8,8.8.4.4
           gateway: 10.0.0.1
@@ -31,7 +31,7 @@ networks-configuration:
             - europe-west2-a
             - europe-west2-b
             - europe-west2-c
-        - iaas_identifier: dev-network/dev-services-subnet/europe-west2
+        - iaas_identifier: ((env))-network/((env))-services-subnet/europe-west2
           cidr: 10.0.8.0/24
           dns: 8.8.8.8,8.8.4.4
           gateway: 10.0.8.1
