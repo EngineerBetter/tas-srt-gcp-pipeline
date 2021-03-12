@@ -642,7 +642,6 @@ jobs:
     image: platform-automation-image
     file: tas-srt-gcp-pipeline-repo/ci/tasks/delete-vm/task.yml
     input_mapping:
-      image: opsman-image
       config: tas-srt-gcp-pipeline-repo
       vars: tas-srt-gcp-pipeline-repo
     params:
