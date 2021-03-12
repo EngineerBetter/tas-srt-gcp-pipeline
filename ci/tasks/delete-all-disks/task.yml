@@ -7,4 +7,4 @@ params:
   CLOUDSDK_CORE_DISABLE_PROMPTS: 1
 
 run:
-  path: tas-srt-gcp-pipeline-repo/ci/tasks/delete-all-disk/task.sh
+  path: tas-srt-gcp-pipeline-repo/ci/tasks/delete-all-disks/task.sh
