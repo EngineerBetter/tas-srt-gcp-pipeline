@@ -452,6 +452,7 @@ jobs:
         file: platform-automation-tasks/tasks/download-product.yml
         input_mapping:
           config: tas-srt-gcp-pipeline-repo
+          vars: tas-srt-gcp-pipeline-repo
         params:
           CONFIG_FILE: config/download-tas-stemcell.yml
           VARS_FILES: vars/vars/((env)).yml
@@ -472,6 +473,7 @@ jobs:
         file: platform-automation-tasks/tasks/download-product.yml
         input_mapping:
           config: tas-srt-gcp-pipeline-repo
+          vars: tas-srt-gcp-pipeline-repo
         params:
           CONFIG_FILE: config/download-tas.yml
           VARS_FILES: vars/vars/((env)).yml
