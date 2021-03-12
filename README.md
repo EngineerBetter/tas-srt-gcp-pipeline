@@ -80,6 +80,10 @@ credentials:
     GitHub account, indented two spaces to the right of the 'value' field
     above.
 
+- name: /concourse/((concourse_team))/((concourse_pipeline))/pivnet_token
+  type: value
+  value: # A UAA API Token for accessing Tanzu Network - see https://network.pivotal.io/docs/api
+
 - name: /concourse/((concourse_team))/((concourse_pipeline))/organization_id
   type: value
   value: # ID of Google Cloud organization whose existence is a prerequisite

@@ -107,17 +107,12 @@ resources:
       json_key: ((inception_gcp_credentials_json))
     versioned_file: ci/terraform.tfstate
 
-- name: platform-automation-tasks
-  type: gcs
+- name: platform-automation-pivnet
+  type: pivnet
   source:
-    <<: *gcs-source
-    regexp: platform-automation-tasks-(.*).zip
-
-- name: platform-automation-image
-  type: gcs
-  source:
-    <<: *gcs-source
-    regexp: platform-automation-image-(.*).tgz
+    api_token: ((pivnet_token))
+    product_slug: platform-automation
+    sort_by: semver
 
 # VM state and foundation tas-srt-gcp-pipeline-repo
 - name: state
@@ -300,9 +295,11 @@ jobs:
     - get: platform-automation-image
       params:
         unpack: true
+        globs: [platform-automation-image-(.*).tgz]
     - get: platform-automation-tasks
       params:
         unpack: true
+        globs: [platform-automation-tasks-(.*).zip]
     - get: tas-srt-gcp-pipeline-repo
       trigger: true
       passed: [load-tfvars-into-credhub]
@@ -424,9 +421,11 @@ jobs:
     - get: platform-automation-image
       params:
         unpack: true
+        globs: [platform-automation-image-(.*).tgz]
     - get: platform-automation-tasks
       params:
         unpack: true
+        globs: [platform-automation-tasks-(.*).zip]
     - get: tas-srt-gcp-pipeline-repo
       trigger: true
       passed: [install-opsman]
@@ -520,9 +519,11 @@ jobs:
     - get: platform-automation-image
       params:
         unpack: true
+        globs: [platform-automation-image-(.*).tgz]
     - get: platform-automation-tasks
       params:
         unpack: true
+        globs: [platform-automation-tasks-(.*).zip]
     - get: tas-srt-gcp-pipeline-repo
       trigger: true
       passed: [configure-tas]
@@ -613,9 +614,11 @@ jobs:
     - get: platform-automation-image
       params:
         unpack: true
+        globs: [platform-automation-image-(.*).tgz]
     - get: platform-automation-tasks
       params:
         unpack: true
+        globs: [platform-automation-tasks-(.*).zip]
     - get: tas-srt-gcp-pipeline-repo
       passed: [set-pipeline]
     - get: paving-terraform
