@@ -9,3 +9,6 @@ zone: europe-west2-b
 folder_name: spikes
 bucket_location: EU
 parent_domain: engineerbetter.com
+tas_version: 2.7.31
+opsman_version: 2.7.29
+tas_stemcell: "456.137"

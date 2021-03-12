@@ -5,4 +5,4 @@ pivnet-product-slug: ops-manager
 
 # Either product-version OR product-version-regex is required
 # product-version-regex: ^1\.2\..*$ # must not be quoted
-product-version: 2.7.29
+product-version: ((opsman_version))

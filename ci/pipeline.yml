@@ -331,6 +331,7 @@ jobs:
       vars: tas-srt-gcp-pipeline-repo
     params:
       CONFIG_FILE: config/download-opsman.yml
+      VARS_FILES: vars/vars/((env)).yml
     output_mapping:
       downloaded-product: opsman-image
   - task: write-gcp-creds-to-file
@@ -453,6 +454,7 @@ jobs:
           config: tas-srt-gcp-pipeline-repo
         params:
           CONFIG_FILE: config/download-tas-stemcell.yml
+          VARS_FILES: vars/vars/((env)).yml
           SOURCE: pivnet
         output_mapping:
           downloaded-product: tas-stemcell
@@ -472,6 +474,7 @@ jobs:
           config: tas-srt-gcp-pipeline-repo
         params:
           CONFIG_FILE: config/download-tas.yml
+          VARS_FILES: vars/vars/((env)).yml
           SOURCE: pivnet
         output_mapping:
           downloaded-product: tas-product
