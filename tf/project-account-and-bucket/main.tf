@@ -31,58 +31,69 @@ resource "google_service_account_key" "ci_bot_key" {
 }
 
 resource "google_project_service" "dns" {
-  project = var.project_id
-  service = "dns.googleapis.com"
+  project                    = var.project_id
+  service                    = "dns.googleapis.com"
+  disable_dependent_services = true
 }
 
 resource "google_project_service" "compute" {
-  project = var.project_id
-  service = "compute.googleapis.com"
+  project                    = var.project_id
+  service                    = "compute.googleapis.com"
+  disable_dependent_services = true
 }
 
 resource "google_project_service" "networking" {
-  project = var.project_id
-  service = "servicenetworking.googleapis.com"
+  project                    = var.project_id
+  service                    = "servicenetworking.googleapis.com"
+  disable_dependent_services = true
 }
 
 resource "google_project_service" "stackdriver" {
-  project = var.project_id
-  service = "stackdriver.googleapis.com"
+  project                    = var.project_id
+  service                    = "stackdriver.googleapis.com"
+  disable_dependent_services = true
 }
 
 resource "google_project_service" "monitoring" {
-  project = var.project_id
-  service = "monitoring.googleapis.com"
+  project                    = var.project_id
+  service                    = "monitoring.googleapis.com"
+  disable_dependent_services = true
 }
 
 resource "google_project_service" "logging" {
-  project = var.project_id
-  service = "logging.googleapis.com"
+  project                    = var.project_id
+  service                    = "logging.googleapis.com"
+  disable_dependent_services = true
 }
 
 resource "google_project_service" "cloudresourcemanager" {
-  project = var.project_id
-  service = "cloudresourcemanager.googleapis.com"
+  project                    = var.project_id
+  service                    = "cloudresourcemanager.googleapis.com"
+  disable_dependent_services = true
 }
 
 resource "google_project_service" "cloudtrace" {
-  project = var.project_id
-  service = "cloudtrace.googleapis.com"
+  project                    = var.project_id
+  service                    = "cloudtrace.googleapis.com"
+  disable_dependent_services = true
 }
 
 resource "google_project_service" "iamcredentials" {
-  project = var.project_id
-  service = "iamcredentials.googleapis.com"
+  project                    = var.project_id
+  service                    = "iamcredentials.googleapis.com"
+  disable_dependent_services = true
 }
 
 resource "google_project_service" "storage" {
-  project = var.project_id
-  service = "storage.googleapis.com"
+  project                    = var.project_id
+  service                    = "storage.googleapis.com"
+  disable_dependent_services = true
 }
 
 resource "google_project_service" "iam" {
-  project = var.project_id
-  service = "iam.googleapis.com"
+  project                    = var.project_id
+  service                    = "iam.googleapis.com"
+  disable_dependent_services = true
 }
 
 data "google_compute_zones" "available" {
